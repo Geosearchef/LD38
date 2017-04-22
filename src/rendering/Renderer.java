@@ -22,6 +22,7 @@ import de.geosearchef.matella.terrains.Terrain;
 import de.geosearchef.matella.water.WaterTile;
 import game.Field;
 import game.Game;
+import lombok.Getter;
 import lombok.NonNull;
 import util.OpenSimplexNoise;
 
@@ -76,9 +77,8 @@ public class Renderer {
 		OpenSimplexNoise noise = new OpenSimplexNoise(System.currentTimeMillis());
 		for(Field[] fields : Game.fields) {
 			for(Field field : fields) {
-				Vector2f pos = new Vector2f(field.getPosX() + (field.isLefter() ? 0f : 0.5f), field.getPosY() / 1.154694410f);
-				fieldEntities.add(new Entity(fieldModel, new Vector3f(pos.x, (float) noise.eval(pos.x / 4f, pos.y / 4f) * 0.4f, pos.y), new Vector3f(0f, 0f, 0f), new Vector3f(1f, 1f, 1f), false));
-				fieldEntities.get(fieldEntities.size() - 1).setColor(new Vector4f(field.getPosX() / (float)Game.FIELDS_X, field.getPosY() / (float)Game.FIELDS_Y, 0f, 1f));
+				fieldEntities.add(new Entity(fieldModel, new Vector3f(field.getX(), (float) noise.eval(field.getX() / 4f, field.getY() / 4f) * 0.4f, field.getY()), new Vector3f(0f, 0f, 0f), new Vector3f(1f, 1f, 1f), false));
+				fieldEntities.get(fieldEntities.size() - 1).setColor(new Vector4f(field.getX() / (float)Game.FIELDS_X, field.getY() / (float)Game.FIELDS_Y, 0f, 1f));
 				//TODO identifiable
 			}
 		}
