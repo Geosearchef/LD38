@@ -37,10 +37,16 @@ public class Renderer {
 		
 		player = new Player(null, new Vector3f(0, 0, 0), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1), false);
 		camera = new Camera(player);
+		
+		//TODO: renderer world init
 	}
 	
 	public static void render(float d) {
 		
+		//TODO world render coder
+		
+		
+		renderer.fullRender(null, Game.entities, null, Game.lights, waterTiles, 0f, camera, null, null);
 		Game.world.render(renderer, camera, null);
 	}
 }
