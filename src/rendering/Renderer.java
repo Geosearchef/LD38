@@ -146,7 +146,7 @@ public class Renderer {
 
 		List<Entity> entities = new LinkedList<Entity>();
 		entities.addAll(fieldEntities);
-		// entities.addAll(Game.units);
+		entities.addAll(Game.units);
 
 		List<WaterTile> waterTiles = new LinkedList<WaterTile>();
 		waterTiles.add(waterTile);

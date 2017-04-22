@@ -26,7 +26,29 @@ public abstract class Unit extends Entity {
 	}
 
 	@Override
-	public abstract void update(float d);
+	public void update(float d) {
+		super.update(d);
+
+		float distance = Math
+				.abs(this.getPosition().x * this.getPosition().z - this.field.getPosX() * this.field.getPosY());
+		Field field = this.field;
+
+		for (Field f : this.field.getNeighbors()) {
+			float distanceTemp = Math.abs(this.getPosition().x * this.getPosition().z - f.getPosX() * f.getPosY());
+			if (distanceTemp > distance) {
+				distance = distanceTemp;
+				field = f;
+			}
+		}
+
+		this.field.units.remove(this);
+		this.field = field;
+		this.field.units.add(this);
+		System.out.println("(" + this.field.getRawPosX() + ", " + this.field.getRawPosY() + ")");
+
+		this.getPosition().y = this.field.getHeight();
+
+	}
 
 	public abstract String getModelName();
 }

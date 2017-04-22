@@ -3,7 +3,10 @@ package game;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.lwjgl.util.vector.Vector3f;
+
 import game.units.Unit;
+import game.units.UnitMelee;
 
 public class Game {
 
@@ -27,7 +30,9 @@ public class Game {
 			}
 		}
 
-		// units.add(new Unit())
+	}
 
+	public static void initUnits() {
+		units.add(new UnitMelee(new Vector3f(0, 0, 0), 0, fields[0][0]));
 	}
 }
