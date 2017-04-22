@@ -92,13 +92,31 @@ public class Renderer {
 	
 	public static void render(float d) {
 		
+		player.getPosition().y = 8f;
+		player.getRotation().x = -48f;
+		player.getRotation().y = 0f;
+		
 		camera.updatePosition();
+		
+		//Scan field entities for update
+		float mapSizeX = Game.FIELDS_X * Field.DIMENSIONS.x;
+		float mapSizeY = Game.FIELDS_Y * Field.DIMENSIONS.y * 0.75f;
+		float mapCenterX =  player.getPosition().x;
+		float mapCenterY =  player.getPosition().z - mapSizeY / 2.0f;
+		for(Entity entity : fieldEntities) {
+			if(Math.abs(mapCenterX - entity.getPosition().x - mapSizeX) < Math.abs(mapCenterX - entity.getPosition().x))
+				entity.getPosition().x += mapSizeX;
+			if(Math.abs(mapCenterX - entity.getPosition().x + mapSizeX) < Math.abs(mapCenterX - entity.getPosition().x))
+				entity.getPosition().x -= mapSizeX;
+			if(Math.abs(mapCenterY - entity.getPosition().z - mapSizeY) < Math.abs(mapCenterY - entity.getPosition().z))
+				entity.getPosition().z += mapSizeY;
+			if(Math.abs(mapCenterY - entity.getPosition().z + mapSizeY) < Math.abs(mapCenterY - entity.getPosition().z))
+				entity.getPosition().z -= mapSizeY;
+		}
 		
 		List<Entity> entities = new LinkedList<Entity>();
 		entities.addAll(fieldEntities);
 //		entities.addAll(Game.units);
-		
-		
 		
 		List<WaterTile> waterTiles = new LinkedList<WaterTile>();
 		waterTiles.add(waterTile);
