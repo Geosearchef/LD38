@@ -77,8 +77,8 @@ public class Renderer {
 		OpenSimplexNoise noise = new OpenSimplexNoise(System.currentTimeMillis());
 		for(Field[] fields : Game.fields) {
 			for(Field field : fields) {
-				fieldEntities.add(new Entity(fieldModel, new Vector3f(field.getX(), (float) noise.eval(field.getX() / 4f, field.getY() / 4f) * 0.4f, field.getY()), new Vector3f(0f, 0f, 0f), new Vector3f(1f, 1f, 1f), false));
-				fieldEntities.get(fieldEntities.size() - 1).setColor(new Vector4f(field.getX() / (float)Game.FIELDS_X, field.getY() / (float)Game.FIELDS_Y, 0f, 1f));
+				fieldEntities.add(new Entity(fieldModel, new Vector3f(field.getPosX(), (float) noise.eval(field.getPosX() / 4f, field.getPosY() / 4f) * 0.4f, field.getPosY()), new Vector3f(0f, 0f, 0f), new Vector3f(1f, 1f, 1f), false));
+				fieldEntities.get(fieldEntities.size() - 1).setColor(new Vector4f(field.getPosX() / (float)Game.FIELDS_X, field.getPosY() / (float)Game.FIELDS_Y, 0f, 1f));
 				//TODO identifiable
 			}
 		}
