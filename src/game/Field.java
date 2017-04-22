@@ -19,7 +19,7 @@ public class Field {
 	private @NonNull @Getter @Setter FieldType type;
 	private @Getter Field[] neighbors = new Field[6];
 
-	void setneighbors(Field[][] fields) {
+	void calculateNeighbors(Field[][] fields) {
 
 		int rightShift = isLefter() ? 0 : 1;
 
