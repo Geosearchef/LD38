@@ -6,20 +6,20 @@ import de.geosearchef.matella.entities.Entity;
 import de.geosearchef.matella.models.Model;
 import game.Field;
 import lombok.Getter;
+import lombok.Setter;
 import rendering.Renderer;
 
 public abstract class Unit extends Entity {
 
 	private @Getter int alliance;
-	private @Getter int id;
 	private Field field;
+	private @Getter @Setter Vector3f relativePosition = new Vector3f();//pos relative to current field's entity
 
 	public Unit(Vector3f position, int alliance, Field startingField) {
 		super(null, position, new Vector3f(0, 0, 0), new Vector3f(1, 1, 1), false);
 
 		this.setModel(Renderer.models.stream().filter(m -> m.getName().equals(getModelName())).findAny().get());
 
-		this.id = id;
 		this.alliance = alliance;
 		this.field = startingField;
 		this.field.units.add(this);
@@ -27,8 +27,15 @@ public abstract class Unit extends Entity {
 
 	@Override
 	public void update(float d) {
-		super.update(d);
-
+		
+		relativePosition.x += getVelocity().x * d;
+		relativePosition.y += getVelocity().y * d;
+		relativePosition.z += getVelocity().z * d;
+		
+		this.setPosition(Vector3f.add(relativePosition, field.getEntity().getPosition(), null));
+		
+		
+		//TODO: adapt to relative positions
 		float distance = Math
 				.abs(this.getPosition().x * this.getPosition().z - this.field.getPosX() * this.field.getPosY());
 		Field field = this.field;
@@ -40,7 +47,9 @@ public abstract class Unit extends Entity {
 				field = f;
 			}
 		}
-
+		
+		//TODO: only when switching field
+		//TODO: when switching field adapt relative position
 		this.field.units.remove(this);
 		this.field = field;
 		this.field.units.add(this);
