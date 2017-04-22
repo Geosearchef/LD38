@@ -1,8 +1,14 @@
 package rendering;
 
+import org.lwjgl.util.vector.Vector2f;
+import org.lwjgl.util.vector.Vector3f;
+
+import de.geosearchef.matella.entities.Player;
 import de.geosearchef.matella.renderEngine.Camera;
+import de.geosearchef.matella.renderEngine.DisplayManager;
 import de.geosearchef.matella.renderEngine.MainLoader;
 import de.geosearchef.matella.renderEngine.MasterRenderer;
+import game.Game;
 
 public class Renderer {
 	
@@ -20,13 +26,21 @@ public class Renderer {
 	public static MainLoader loader;
 	public static MasterRenderer renderer;
 	public static Camera camera;
+	public static Player player;
 	
 	
 	public static void init() {
+		DisplayManager.createDisplay(TITLE, WIDTH, HEIGHT, FPS_CAP, MSAA, FULLSCREEN, VSYNC);
+		loader = new MainLoader();
+
+		renderer = new MasterRenderer(loader, CAST_SHADOW, new Vector2f(SHADOW_FRAMEBUFFER_SIZE, SHADOW_FRAMEBUFFER_SIZE), null, null);
 		
+		player = new Player(null, new Vector3f(0, 0, 0), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1), false);
+		camera = new Camera(player);
 	}
 	
-	public static void render() {
+	public static void render(float d) {
 		
+		Game.world.render(renderer, camera, null);
 	}
 }
