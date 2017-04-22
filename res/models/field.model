@@ -1,0 +1,13 @@
+list model
+obj field
+texture white
+usesnormalmap false
+usesatm false
+reflectivity 0.0
+shinedamper 20.0
+environmentReflectivity 0.0
+texturerows 1
+textureindexanimationframetime 0.0
+hastransparency false
+usefakelighting false
+endlist mode
