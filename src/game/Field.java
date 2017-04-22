@@ -62,6 +62,8 @@ public class Field {
 		y = (rawPosY - 1);
 		if (x < 0)
 			x += Game.FIELDS_X;
+		if (y < 0)
+			y += Game.FIELDS_Y;
 		neighbors[5] = fields[x][y];
 
 		this.posX = rawPosX + (isLefter() ? 0 : 0.5f);
