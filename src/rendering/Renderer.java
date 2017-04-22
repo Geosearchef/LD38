@@ -36,7 +36,7 @@ public class Renderer {
 	private static final int MSAA = 16;
 	private static final boolean FULLSCREEN = false;
 	private static final boolean VSYNC = true;
-	private static final boolean CAST_SHADOW = true;
+	private static final boolean CAST_SHADOW = false;
 	private static final int SHADOW_FRAMEBUFFER_SIZE = 1024;
 
 	public static MainLoader loader;
@@ -112,7 +112,9 @@ public class Renderer {
 		camera.updatePosition();
 		lights.get(0).setPosition(new Vector3f(camera.getPosition().x + 50f, lights.get(0).getPosition().y, camera.getPosition().z + 50f));
 //		lights.get(0).setPosition(new Vector3f(camera.getPosition().x + 0, lights.get(0).getPosition().y, camera.getPosition().z - 50));
-
+		renderer.setShadowMapCenter(new Vector3f(camera.getPosition()));
+		
+		
 		// Scan field entities for update
 		float mapSizeX = Game.FIELDS_X * Field.DIMENSIONS.x;
 		float mapSizeY = Game.FIELDS_Y * Field.DIMENSIONS.y * 0.75f;
