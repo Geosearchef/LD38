@@ -78,12 +78,19 @@ public class Renderer {
 		for (Field[] fields : Game.fields) {
 			for (Field field : fields) {
 				float fieldHeight = (float) noise.eval(field.getPosX() / 4f, field.getPosY() / 4f) * 0.4f;
-				fieldEntities.add(new Entity(fieldModel,new Vector3f(field.getPosX(), fieldHeight, field.getPosY()), new Vector3f(0f, 0f, 0f), new Vector3f(1f, 1f, 1f), false));
-				fieldEntities.get(fieldEntities.size() - 1).setColor(new Vector4f(
-						field.getPosX() / (float) Game.FIELDS_X, field.getPosY() / (float) Game.FIELDS_Y, 0f, 1f));
+				Entity fieldEntity = new Entity(fieldModel,new Vector3f(field.getPosX(), fieldHeight, field.getPosY()), new Vector3f(0f, 0f, 0f), new Vector3f(1f, 1f, 1f), false); 
+				fieldEntity.setColor(new Vector4f(field.getPosX() / (float) Game.FIELDS_X, field.getPosY() / (float) Game.FIELDS_Y, 0f, 1f));
+				fieldEntity.setName(field.getRawPosX() + "|" + field.getRawPosY());
+				fieldEntities.add(fieldEntity);
 				
+				field.setEntity(fieldEntity);
 				field.setHeight(fieldHeight);
-				// TODO identifiable
+			}
+		}
+		
+		for (Field[] fields : Game.fields) {
+			for (Field field : fields) {
+				
 			}
 		}
 		
@@ -103,6 +110,8 @@ public class Renderer {
 		player.getRotation().y = 0f;
 
 		camera.updatePosition();
+		lights.get(0).setPosition(new Vector3f(camera.getPosition().x + 50f, lights.get(0).getPosition().y, camera.getPosition().z + 50f));
+//		lights.get(0).setPosition(new Vector3f(camera.getPosition().x + 0, lights.get(0).getPosition().y, camera.getPosition().z - 50));
 
 		// Scan field entities for update
 		float mapSizeX = Game.FIELDS_X * Field.DIMENSIONS.x;
