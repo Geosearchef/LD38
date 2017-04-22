@@ -20,7 +20,7 @@ public class Field {
 	private @NonNull @Getter @Setter FieldType type;
 	private @Getter Field[] neighbors = new Field[6];
 	private @Getter float posX, posY;
-	private @Getter @Setter float height = 2f;//too heigh, error can be clearly seen in game
+	private @Getter float height = 2f;//too heigh, error can be clearly seen in game
 	private @Getter @Setter Entity entity;
 
 	void calculateNeighbors(Field[][] fields) {
@@ -75,5 +75,11 @@ public class Field {
 
 	public boolean isLefter() {
 		return rawPosY % 2 == 0;
+	}
+	
+	public synchronized void setHeight(float height) {
+		this.height = height;
+		if(this.entity != null)
+			this.entity.getPosition().y = this.height;
 	}
 }

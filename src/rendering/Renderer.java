@@ -1,8 +1,11 @@
 package rendering;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
 
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
@@ -88,11 +91,17 @@ public class Renderer {
 			}
 		}
 		
+		Map<Field, Float> newHeights = new HashMap<Field, Float>();
 		for (Field[] fields : Game.fields) {
 			for (Field field : fields) {
-				
+				Stream.of(field.getNeighbors())
+				.filter(n -> Vector2f.sub(new Vector2f(field.getRawPosX(), field.getRawPosY()), new Vector2f(n.getRawPosX(), n.getRawPosY()), null).lengthSquared() > 9)
+				.mapToDouble(n -> n.getHeight())
+				.average()
+				.ifPresent(avg -> newHeights.put(field, field.getHeight() * 0.68f + (float)avg * 0.32f));
 			}
 		}
+		newHeights.entrySet().forEach(entry -> entry.getKey().setHeight(entry.getValue()));
 		
 		loadModels();
 	}
