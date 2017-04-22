@@ -19,6 +19,7 @@ public class Field {
 	private @NonNull @Getter @Setter FieldType type;
 	private @Getter Field[] neighbors = new Field[6];
 	private @Getter float posX, posY;
+	private @Getter @Setter float height = 2f;//too heigh, error can be clearly seen in game
 
 	void calculateNeighbors(Field[][] fields) {
 
