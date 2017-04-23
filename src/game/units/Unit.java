@@ -42,7 +42,17 @@ public abstract class Unit extends Entity {
 		relativePosition.x += getVelocity().x * d;
 		relativePosition.y += getVelocity().y * d;
 		relativePosition.z += getVelocity().z * d;
+		
+		if (this.relativePosition.x > Game.MAP_SIZE_X)
+			this.relativePosition.x -= Game.MAP_SIZE_X;
+		if (this.relativePosition.z > Game.MAP_SIZE_Y)
+			this.relativePosition.z -= Game.MAP_SIZE_Y;
 
+		if (this.relativePosition.x < -Game.MAP_SIZE_X)
+			this.relativePosition.x += Game.MAP_SIZE_X;
+		if (this.relativePosition.z < -Game.MAP_SIZE_Y)
+			this.relativePosition.z += Game.MAP_SIZE_Y;
+			
 		this.setPosition(Vector3f.add(relativePosition, field.getEntity().getPosition(), null));
 		this.getPosition().y += (this.field.getHeight() - this.getPosition().y) * d * 3f;
 
@@ -67,19 +77,11 @@ public abstract class Unit extends Entity {
 
 			this.relativePosition = Vector3f.add(this.relativePosition, new Vector3f(this.field.getPosX() - field.getPosX(), this.field.getHeight() - field.getHeight(), this.field.getPosY() - field.getPosY()), null);
 
-			if (this.relativePosition.x > Game.MAP_SIZE_X)
-				this.relativePosition.x -= Game.MAP_SIZE_X;
-			if (this.relativePosition.z > Game.MAP_SIZE_Y)
-				this.relativePosition.z -= Game.MAP_SIZE_Y;
-
-			if (this.relativePosition.x < -Game.MAP_SIZE_X)
-				this.relativePosition.x += Game.MAP_SIZE_X;
-			if (this.relativePosition.z < -Game.MAP_SIZE_Y)
-				this.relativePosition.z += Game.MAP_SIZE_Y;
-
 			this.field.units.remove(this);
 			this.field = field;
 			this.field.units.add(this);
+			// System.out.println("(" + this.field.getRawPosX() + ", " +
+			// this.field.getRawPosY() + ")");
 
 		}
 

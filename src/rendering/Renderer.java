@@ -74,35 +74,6 @@ public class Renderer {
 		// Setup scene, load models
 		lights.add(new Light(new Vector3f(0f, 50f, 0f), new Vector3f(1f, 1f, 1f)));
 		lights.add(new Light(new Vector3f(0f, 50f, 0f), new Vector3f(1f, 1f, 1f)));
-		fieldModel = ModelLoader.loadModel("field", loader, null);
-
-		// Generate map field entities
-		OpenSimplexNoise noise = new OpenSimplexNoise(System.currentTimeMillis());
-		for (Field[] fields : Game.fields) {
-			for (Field field : fields) {
-				float fieldHeight = (float) noise.eval(field.getPosX() / 4f, field.getPosY() / 4f) * 0.4f;
-				Entity fieldEntity = new Entity(fieldModel,new Vector3f(field.getPosX(), fieldHeight, field.getPosY()), new Vector3f(0f, 0f, 0f), new Vector3f(1f, 1f, 1f), false); 
-//				fieldEntity.setColor(new Vector4f(field.getPosX() / (float) Game.FIELDS_X, field.getPosY() / (float) Game.FIELDS_Y, 0f, 1f));
-				fieldEntity.setColor(field.getType().getColor());
-				fieldEntity.setName(field.getRawPosX() + "," + field.getRawPosY());
-				fieldEntities.add(fieldEntity);
-				
-				field.setEntity(fieldEntity);
-				field.setHeight(fieldHeight);
-			}
-		}
-		
-		Map<Field, Float> newHeights = new HashMap<Field, Float>();
-		for (Field[] fields : Game.fields) {
-			for (Field field : fields) {
-				Stream.of(field.getNeighbors())
-				.filter(n -> Vector2f.sub(new Vector2f(field.getRawPosX(), field.getRawPosY()), new Vector2f(n.getRawPosX(), n.getRawPosY()), null).lengthSquared() > 9)
-				.mapToDouble(n -> n.getHeight())
-				.average()
-				.ifPresent(avg -> newHeights.put(field, field.getHeight() * 0.68f + (float)avg * 0.32f));
-			}
-		}
-		newHeights.entrySet().forEach(entry -> entry.getKey().setHeight(entry.getValue()));
 		
 		loadModels();
 	}
