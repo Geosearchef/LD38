@@ -9,6 +9,8 @@ public class StartLD38 {
 
 		Game.init();
 		Renderer.init();
+		Game.initUnits();
+		
 		Updater.init();
 		
 		GameLoop.loop();
