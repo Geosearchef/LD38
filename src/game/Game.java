@@ -56,6 +56,7 @@ public class Game {
 		// 4][FIELDS_Y / 2]));
 	}
 
+	// World Gen
 	public static void initFieldEntities() {
 
 		Model fieldModel = ModelLoader.loadModel("field", rendering.Renderer.loader, null);
@@ -118,7 +119,7 @@ public class Game {
 								break waterSandSearch;
 							}
 						}
-						field.setType(FieldType.GROUND);
+						field.setType(FieldType.FARMLAND);
 					}
 
 				}
