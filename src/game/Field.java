@@ -2,8 +2,10 @@ package game;
 
 import java.util.ArrayList;
 import org.lwjgl.util.vector.Vector2f;
+import org.lwjgl.util.vector.Vector4f;
 
 import de.geosearchef.matella.entities.Entity;
+import game.units.Alliance;
 import game.units.Unit;
 import lombok.Getter;
 import lombok.NonNull;
@@ -110,24 +112,31 @@ public class Field {
 	}
 
 	public void setType(FieldType type) {
-		this.type = type;
-		if (type == FieldType.FARMLAND)
+		if (type == FieldType.FARMLAND) {
 			plantingCycle = 0;
+			this.setGrowthState(GrowthState.GROWTH_STATE_0);
+		}else{
+			this.setGrowthState(null);
+			this.getEntity().setColor(type.getColor());
+		}
+		this.type = type;
 		this.setHeight(this.getHeight());
-		this.getEntity().setColor(type.getColor());
 	}
 
 	// Farmland
 	private static final float GROWTH_STATE_DURATION = 1f;
 	private static final int MAX_PLANTING_CYCLES = 3;
+	private static final int FOOD_PER_HARVEST = 25;
 
 	private enum GrowthState {
-		GROWTH_STATE_0(0), GROWTH_STATE_1(1), GROWTH_STATE_2(2), FULLY_GROWN(3);
+		FULLY_GROWN(0, new Vector4f(0.866f, 0.741f, 0.211f, 1f)), GROWTH_STATE_0(1, FieldType.FARMLAND.getColor()), GROWTH_STATE_1(2, (Vector4f) Vector4f.add(GROWTH_STATE_0.getColor(), Vector4f.add(GROWTH_STATE_0.getColor(), FULLY_GROWN.getColor(), null), null).scale(0.333f)), GROWTH_STATE_2(3, (Vector4f) Vector4f.add(FULLY_GROWN.getColor(), Vector4f.add(GROWTH_STATE_0.getColor(), FULLY_GROWN.getColor(), null), null).scale(0.333f));
 
-		public final int index;
+		public final @Getter int index;
+		public final @Getter Vector4f color;
 
-		GrowthState(int index) {
+		GrowthState(int index, Vector4f color) {
 			this.index = index;
+			this.color = color;
 		}
 	}
 
@@ -142,7 +151,13 @@ public class Field {
 			if (growthState != null && growthState != GrowthState.FULLY_GROWN) {
 				this.timePlanted += d;
 				if (this.timePlanted > GROWTH_STATE_DURATION) {
-					this.growthState = GrowthState.values()[this.growthState.index];
+					// System.out.println("Updating GROWTH!");
+					int index=this.growthState.index + 1;
+					if(index>=GrowthState.values().length){
+						this.setGrowthState(GrowthState.FULLY_GROWN);
+					}else{
+						this.setGrowthState(GrowthState.values()[index]);
+					}
 					this.timePlanted = 0;
 				}
 			}
@@ -153,16 +168,27 @@ public class Field {
 	public void plantWheat() {
 		if (type == FieldType.FARMLAND) {
 			plantingCycle++;
-			if (plantingCycle > MAX_PLANTING_CYCLES) {
-				this.setType(FieldType.GRASS);
-			} else {
-				this.growthState = GrowthState.GROWTH_STATE_0;
-				this.timePlanted = 0;
-			}
+			this.setGrowthState(GrowthState.GROWTH_STATE_0);
+			this.timePlanted = 0;
 		}
 	}
 
-	public void harvest() {
-		this.growthState=null;
+	public void harvest(Alliance alliance) {
+		this.setGrowthState(null);
+		if (plantingCycle == MAX_PLANTING_CYCLES)
+			this.setType(FieldType.GRASS);
+		game.ResourceManager.changeFoodCount(alliance, FOOD_PER_HARVEST);
+	}
+
+	private void setGrowthState(GrowthState growthState) {
+		this.growthState = growthState;
+		if (this.growthState == null)
+			this.getEntity().setColor(GrowthState.GROWTH_STATE_0.getColor());
+		else
+			this.getEntity().setColor(this.growthState.getColor());
+	}
+	
+	public boolean isHarvestable(){
+		return this.growthState==GrowthState.FULLY_GROWN;
 	}
 }

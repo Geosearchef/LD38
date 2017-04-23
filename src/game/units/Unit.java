@@ -33,6 +33,7 @@ public abstract class Unit extends Entity {
 		this.alliance = alliance;
 		this.field = startingField;
 		this.field.units.add(this);
+		this.setColor(this.alliance.getColor());
 	}
 
 	@Override
