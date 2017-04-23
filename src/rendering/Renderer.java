@@ -30,7 +30,7 @@ import lombok.NonNull;
 import util.OpenSimplexNoise;
 
 public class Renderer {
-	
+
 	private static final String TITLE = "LD38";
 
 	private static final int WIDTH = 1920;
@@ -56,6 +56,8 @@ public class Renderer {
 		GPUProfiler.setPROFILING_ENABLED(false);
 
 		player = new Player(null, new Vector3f(0, 0, 0), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1), false);
+		player.setMovementSpeed(10);
+		player.setCtrlMultiplier(1);
 		camera = new Camera(player);
 
 		// Renderer options
@@ -74,7 +76,7 @@ public class Renderer {
 		// Setup scene, load models
 		lights.add(new Light(new Vector3f(0f, 50f, 0f), new Vector3f(1f, 1f, 1f)));
 		lights.add(new Light(new Vector3f(0f, 50f, 0f), new Vector3f(1f, 1f, 1f)));
-		
+
 		loadModels();
 	}
 
@@ -93,42 +95,34 @@ public class Renderer {
 		camera.updatePosition();
 		lights.get(1).setPosition(new Vector3f(camera.getPosition().x + 50f, lights.get(0).getPosition().y, camera.getPosition().z + 50f));
 		lights.get(0).setPosition(new Vector3f(camera.getPosition().x + 0f, lights.get(0).getPosition().y, camera.getPosition().z - 50f));
-		lights.get(0).setColor(new Vector3f(1,1,1));
+		lights.get(0).setColor(new Vector3f(1, 1, 1));
 		renderer.setShadowMapCenter(new Vector3f(camera.getPosition()));
-		
-		
+
 		float mapSizeX = Game.FIELDS_X * Field.DIMENSIONS.x;
 		float mapSizeY = Game.FIELDS_Y * Field.DIMENSIONS.y * 0.75f;
 		float mapCenterX = player.getPosition().x;
 		float mapCenterY = player.getPosition().z - mapSizeY / 2.0f;
-		
-//		waterTile.setPosition(new Vector3f(player.getPosition().x / (16f / 100f), -0.4f, player.getPosition().z));
-		if (Math.abs(mapCenterX - waterTile.getPosition().x - 100f/16f) < Math
-				.abs(mapCenterX - waterTile.getPosition().x))
-			waterTile.getPosition().x += 100f/16f;
-		if (Math.abs(mapCenterX - waterTile.getPosition().x + 100f/16f) < Math
-				.abs(mapCenterX - waterTile.getPosition().x))
-			waterTile.getPosition().x -= 100f/16f;
-		if (Math.abs(mapCenterY - waterTile.getPosition().z - 100f/16f) < Math
-				.abs(mapCenterY - waterTile.getPosition().z))
-			waterTile.getPosition().z += 100f/16f;
-		if (Math.abs(mapCenterY - waterTile.getPosition().z + 100f/16f) < Math
-				.abs(mapCenterY - waterTile.getPosition().z))
-			waterTile.getPosition().z -= 100f/16f;
-		
+
+		// waterTile.setPosition(new Vector3f(player.getPosition().x / (16f /
+		// 100f), -0.4f, player.getPosition().z));
+		if (Math.abs(mapCenterX - waterTile.getPosition().x - 100f / 16f) < Math.abs(mapCenterX - waterTile.getPosition().x))
+			waterTile.getPosition().x += 100f / 16f;
+		if (Math.abs(mapCenterX - waterTile.getPosition().x + 100f / 16f) < Math.abs(mapCenterX - waterTile.getPosition().x))
+			waterTile.getPosition().x -= 100f / 16f;
+		if (Math.abs(mapCenterY - waterTile.getPosition().z - 100f / 16f) < Math.abs(mapCenterY - waterTile.getPosition().z))
+			waterTile.getPosition().z += 100f / 16f;
+		if (Math.abs(mapCenterY - waterTile.getPosition().z + 100f / 16f) < Math.abs(mapCenterY - waterTile.getPosition().z))
+			waterTile.getPosition().z -= 100f / 16f;
+
 		// Scan field entities for update
 		for (Entity entity : fieldEntities) {
-			if (Math.abs(mapCenterX - entity.getPosition().x - mapSizeX) < Math
-					.abs(mapCenterX - entity.getPosition().x))
+			if (Math.abs(mapCenterX - entity.getPosition().x - mapSizeX) < Math.abs(mapCenterX - entity.getPosition().x))
 				entity.getPosition().x += mapSizeX;
-			if (Math.abs(mapCenterX - entity.getPosition().x + mapSizeX) < Math
-					.abs(mapCenterX - entity.getPosition().x))
+			if (Math.abs(mapCenterX - entity.getPosition().x + mapSizeX) < Math.abs(mapCenterX - entity.getPosition().x))
 				entity.getPosition().x -= mapSizeX;
-			if (Math.abs(mapCenterY - entity.getPosition().z - mapSizeY) < Math
-					.abs(mapCenterY - entity.getPosition().z))
+			if (Math.abs(mapCenterY - entity.getPosition().z - mapSizeY) < Math.abs(mapCenterY - entity.getPosition().z))
 				entity.getPosition().z += mapSizeY;
-			if (Math.abs(mapCenterY - entity.getPosition().z + mapSizeY) < Math
-					.abs(mapCenterY - entity.getPosition().z))
+			if (Math.abs(mapCenterY - entity.getPosition().z + mapSizeY) < Math.abs(mapCenterY - entity.getPosition().z))
 				entity.getPosition().z -= mapSizeY;
 		}
 
