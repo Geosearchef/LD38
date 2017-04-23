@@ -115,9 +115,9 @@ public class Renderer {
 
 	public static void render(float d) {
 
-		player.getPosition().y = 8f;
-		player.getRotation().x = -48f;
-		player.getRotation().y = 0f;
+////		4wplayer.getPosition().y = 8f;
+////		player.getRotation().x = -48f;
+//		player.getRotation().y = 0f;
 
 		camera.updatePosition();
 		lights.get(1).setPosition(new Vector3f(camera.getPosition().x + 50f, lights.get(0).getPosition().y, camera.getPosition().z + 50f));

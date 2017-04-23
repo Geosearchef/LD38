@@ -8,7 +8,7 @@ import rendering.Renderer;
 import util.pathfinding.Path;
 import util.pathfinding.Pathfinder;
 
-import static game.Game.units;
+import game.*;
 
 import org.lwjgl.input.Mouse;
 
@@ -31,7 +31,7 @@ public class Updater {
 		}
 		
 		//Unit update
-		for (Unit u : units) {
+		for (Unit u : Game.units) {
 			u.update(d);
 		}
 	}

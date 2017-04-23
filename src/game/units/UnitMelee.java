@@ -11,7 +11,7 @@ public class UnitMelee extends Unit {
 
     @Override
     public void update(float d) {
-	// TODO Auto-generated method stub
+	super.update(d);
     }
 
     @Override

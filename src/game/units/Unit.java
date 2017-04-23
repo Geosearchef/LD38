@@ -39,12 +39,12 @@ public abstract class Unit extends Entity {
 
 	// did field change?
 	float distance = Math
-		.abs(this.getPosition().x * this.getPosition().z - this.field.getPosX() * this.field.getPosY());
+		.abs((this.getPosition().x - this.field.getPosX()) * (this.getPosition().z - this.field.getPosY()));
 	Field field = this.field;
 
 	for (Field f : this.field.getNeighbors()) {
-	    float distanceTemp = Math.abs(this.getPosition().x * this.getPosition().z - f.getPosX() * f.getPosY());
-	    if (distanceTemp > distance) {
+	    float distanceTemp = Math.abs((this.getPosition().x - f.getPosX()) * (this.getPosition().z - f.getPosY()));
+	    if (distanceTemp < distance) {
 		distance = distanceTemp;
 		field = f;
 	    }
@@ -64,9 +64,9 @@ public abstract class Unit extends Entity {
 	    if (this.relativePosition.z > Game.MAP_SIZE_Y)
 		this.relativePosition.z -= Game.MAP_SIZE_Y;
 
-	    if (this.relativePosition.x < 0)
+	    if (this.relativePosition.x < -Game.MAP_SIZE_X)
 		this.relativePosition.x += Game.MAP_SIZE_X;
-	    if (this.relativePosition.z < 0)
+	    if (this.relativePosition.z < -Game.MAP_SIZE_Y)
 		this.relativePosition.z += Game.MAP_SIZE_Y;
 
 	    this.field.units.remove(this);
