@@ -73,6 +73,7 @@ public class Renderer {
 
 		// Setup scene, load models
 		lights.add(new Light(new Vector3f(0f, 50f, 0f), new Vector3f(1f, 1f, 1f)));
+		lights.add(new Light(new Vector3f(0f, 50f, 0f), new Vector3f(1f, 1f, 1f)));
 		fieldModel = ModelLoader.loadModel("field", loader, null);
 
 		// Generate map field entities
@@ -108,7 +109,7 @@ public class Renderer {
 
 	public static List<Model> models = new LinkedList<Model>();
 	public static List<Light> lights = new LinkedList<Light>();
-	public static WaterTile waterTile = new WaterTile(new Vector3f(0f, -1f, 0f), 100f);
+	public static WaterTile waterTile = new WaterTile(new Vector3f(0f, -0.4f, 0f), 100f);
 	public static Model fieldModel;
 	public static List<Entity> fieldEntities = new LinkedList<Entity>();
 
@@ -119,16 +120,32 @@ public class Renderer {
 		player.getRotation().y = 0f;
 
 		camera.updatePosition();
-		lights.get(0).setPosition(new Vector3f(camera.getPosition().x + 50f, lights.get(0).getPosition().y, camera.getPosition().z + 50f));
-//		lights.get(0).setPosition(new Vector3f(camera.getPosition().x + 0, lights.get(0).getPosition().y, camera.getPosition().z - 50));
+		lights.get(1).setPosition(new Vector3f(camera.getPosition().x + 50f, lights.get(0).getPosition().y, camera.getPosition().z + 50f));
+		lights.get(0).setPosition(new Vector3f(camera.getPosition().x + 0f, lights.get(0).getPosition().y, camera.getPosition().z - 50f));
+		lights.get(0).setColor(new Vector3f(1,1,1));
 		renderer.setShadowMapCenter(new Vector3f(camera.getPosition()));
 		
 		
-		// Scan field entities for update
 		float mapSizeX = Game.FIELDS_X * Field.DIMENSIONS.x;
 		float mapSizeY = Game.FIELDS_Y * Field.DIMENSIONS.y * 0.75f;
 		float mapCenterX = player.getPosition().x;
 		float mapCenterY = player.getPosition().z - mapSizeY / 2.0f;
+		
+//		waterTile.setPosition(new Vector3f(player.getPosition().x / (16f / 100f), -0.4f, player.getPosition().z));
+		if (Math.abs(mapCenterX - waterTile.getPosition().x - 100f/16f) < Math
+				.abs(mapCenterX - waterTile.getPosition().x))
+			waterTile.getPosition().x += 100f/16f;
+		if (Math.abs(mapCenterX - waterTile.getPosition().x + 100f/16f) < Math
+				.abs(mapCenterX - waterTile.getPosition().x))
+			waterTile.getPosition().x -= 100f/16f;
+		if (Math.abs(mapCenterY - waterTile.getPosition().z - 100f/16f) < Math
+				.abs(mapCenterY - waterTile.getPosition().z))
+			waterTile.getPosition().z += 100f/16f;
+		if (Math.abs(mapCenterY - waterTile.getPosition().z + 100f/16f) < Math
+				.abs(mapCenterY - waterTile.getPosition().z))
+			waterTile.getPosition().z -= 100f/16f;
+		
+		// Scan field entities for update
 		for (Entity entity : fieldEntities) {
 			if (Math.abs(mapCenterX - entity.getPosition().x - mapSizeX) < Math
 					.abs(mapCenterX - entity.getPosition().x))
@@ -152,7 +169,7 @@ public class Renderer {
 		waterTiles.add(waterTile);
 
 		GPUProfiler.startFrame();
-		renderer.fullRender(null, entities, Collections.<Terrain>emptyList(), lights, waterTiles, 2f, camera, null, null);
+		renderer.fullRender(null, entities, Collections.<Terrain>emptyList(), lights, waterTiles, waterTile.getPosition().y, camera, null, null);
 		GPUProfiler.endFrame();
 		GPUProfiler.dumpFrames();
 	}
