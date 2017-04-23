@@ -17,7 +17,7 @@ public class Field {
 
 	public ArrayList<Unit> units = new ArrayList<Unit>();
 	private @Getter final int rawPosX, rawPosY;
-	private @NonNull @Getter @Setter FieldType type;
+	private @NonNull @Getter FieldType type;
 	private @Getter Field[] neighbors = new Field[6];
 	private float posX, posY;
 	private @Getter float height = 2f;// too heigh, error can be clearly seen in
@@ -106,6 +106,12 @@ public class Field {
 	public synchronized void setHeight(float height) {
 		this.height = height;
 		if (this.entity != null)
-			this.entity.getPosition().y = this.height;
+			this.entity.getPosition().y = this.height + (this.type == FieldType.WALL ? 0.8f : 0f);
+	}
+	
+	public void setType(FieldType type) {
+		this.type = type;
+		this.setHeight(this.getHeight());
+		this.getEntity().setColor(type.getColor());
 	}
 }
