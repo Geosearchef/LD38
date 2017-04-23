@@ -52,8 +52,7 @@ public class Renderer {
 		DisplayManager.createDisplay(TITLE, WIDTH, HEIGHT, FPS_CAP, MSAA, FULLSCREEN, VSYNC);
 		loader = new MainLoader();
 
-		renderer = new MasterRenderer(loader, CAST_SHADOW,
-				new Vector2f(SHADOW_FRAMEBUFFER_SIZE, SHADOW_FRAMEBUFFER_SIZE), null, null);
+		renderer = new MasterRenderer(loader, CAST_SHADOW, new Vector2f(SHADOW_FRAMEBUFFER_SIZE, SHADOW_FRAMEBUFFER_SIZE), new LDEntityShaderHook(), null);
 		GPUProfiler.setPROFILING_ENABLED(false);
 
 		player = new Player(null, new Vector3f(0, 0, 0), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1), false);
