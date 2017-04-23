@@ -17,10 +17,10 @@ import util.pathfinding.Path;
 import util.pathfinding.Pathfinder;
 
 public class Input {
-
+	
 	private static MousePicker mousePicker;
 	private static @Getter Field mouseField = null;
-
+	
 	public static boolean wallBuildMode = false;
 	public static boolean farmlandBuildMode = false;
 	public static Field wallBuildStart = null;
@@ -33,7 +33,7 @@ public class Input {
 		// Mouse picker
 		mousePicker.updateForMouse();
 		EntityIntersection intersection = mousePicker.getEntityIntersection(Renderer.fieldEntities, null, false);
-		if (intersection != null) {
+		if(intersection != null) {
 			mouseField = Game.fields[Integer.parseInt(intersection.getEntity().getName().split(",")[0])][Integer.parseInt(intersection.getEntity().getName().split(",")[1])];
 		}
 
@@ -79,6 +79,11 @@ public class Input {
 
 					wallBuildPath = null;
 				}
+			}
+			
+			if(wallBuildMode && Mouse.getEventButton() == 1) {
+				wallBuildPath = null;
+				wallBuildStart = wallBuildEnd = null;
 			}
 
 			// FARM
