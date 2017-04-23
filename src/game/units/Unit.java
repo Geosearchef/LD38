@@ -11,12 +11,14 @@ import rendering.Renderer;
 
 public abstract class Unit extends Entity {
 
-	private @Getter int alliance;
+	private @Getter Alliance alliance;
 	private Field field;
-	private @Getter @Setter Vector3f relativePosition = new Vector3f();//pos relative to current field's entity
+	// pos relative to current field's entity
+	private @Getter @Setter Vector3f relativePosition = new Vector3f();
 
-	public Unit(Vector3f position, int alliance, Field startingField) {
-		super(null, position, new Vector3f(0, 0, 0), new Vector3f(1, 1, 1), false);
+	public Unit(Alliance alliance, Field startingField) {
+		super(null, new Vector3f(startingField.getPosX(), startingField.getHeight(), startingField.getPosY()),
+				new Vector3f(0, 0, 0), new Vector3f(1, 1, 1), false);
 
 		this.setModel(Renderer.models.stream().filter(m -> m.getName().equals(getModelName())).findAny().get());
 
@@ -27,15 +29,14 @@ public abstract class Unit extends Entity {
 
 	@Override
 	public void update(float d) {
-		
+
 		relativePosition.x += getVelocity().x * d;
 		relativePosition.y += getVelocity().y * d;
 		relativePosition.z += getVelocity().z * d;
-		
+
 		this.setPosition(Vector3f.add(relativePosition, field.getEntity().getPosition(), null));
-		
-		
-		//TODO: adapt to relative positions
+
+		// TODO: adapt to relative positions
 		float distance = Math
 				.abs(this.getPosition().x * this.getPosition().z - this.field.getPosX() * this.field.getPosY());
 		Field field = this.field;
@@ -47,14 +48,14 @@ public abstract class Unit extends Entity {
 				field = f;
 			}
 		}
-		
-		//TODO: only when switching field
-		//TODO: when switching field adapt relative position
-		this.field.units.remove(this);
-		this.field = field;
-		this.field.units.add(this);
-		System.out.println("(" + this.field.getRawPosX() + ", " + this.field.getRawPosY() + ")");
 
+		if (this.field != field) {
+			this.field.units.remove(this);
+			this.field = field;
+			this.field.units.add(this);
+			System.out.println("(" + this.field.getRawPosX() + ", " + this.field.getRawPosY() + ")");
+		}
+		
 		this.getPosition().y = this.field.getHeight();
 
 	}
