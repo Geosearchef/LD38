@@ -112,13 +112,15 @@ public class Field {
 	}
 
 	public void setType(FieldType type) {
-		this.type = type;
 		if (type == FieldType.FARMLAND) {
 			plantingCycle = 0;
-			growthState = GrowthState.GROWTH_STATE_0;
+			this.setGrowthState(GrowthState.GROWTH_STATE_0);
+		}else{
+			this.setGrowthState(null);
+			this.getEntity().setColor(type.getColor());
 		}
+		this.type = type;
 		this.setHeight(this.getHeight());
-		this.getEntity().setColor(type.getColor());
 	}
 
 	// Farmland
