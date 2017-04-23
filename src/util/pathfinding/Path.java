@@ -1,5 +1,7 @@
 package util.pathfinding;
 
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import game.Field;
@@ -48,5 +50,11 @@ public class Path {
 				return false;
 		}
 		return true;
+	}
+	
+	public Path reverse() {
+		LinkedList<Field> newList = new LinkedList<Field>(this.fields);
+		Collections.reverse(newList);
+		return new Path(newList);
 	}
 }

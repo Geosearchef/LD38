@@ -21,9 +21,10 @@ public abstract class Unit extends Entity {
 	private @Getter Field field;
 	// pos relative to current field's entity
 	private @Getter @Setter Vector3f relativePosition = new Vector3f((float) (Math.random() - 0.5) / 2, 0, (float) (Math.random() - 0.5) / 2);
-	protected @Getter int health;
-	private @Getter Task task;
-	private CompletableFuture<Task> aiCalculation;
+	protected @Getter float health;
+	private @Getter @Setter Task task;
+	private @Setter CompletableFuture<Task> aiCalculation;
+	protected @Getter float damage = 0;
 
 	public Unit(Alliance alliance, Field startingField) {
 		super(null, new Vector3f(startingField.getPosX(), startingField.getHeight(), startingField.getPosY()), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1), false);
@@ -131,16 +132,16 @@ public abstract class Unit extends Entity {
 
 	public abstract String getModelName();
 
-	public void damage(int damage) {
+	public void damage(float damage) {
 		this.health -= damage;
-		if (health < 0) {
-			this.kill();
-		}
 	}
-
+	
 	public void kill() {
-		game.Game.units.remove(this);
 		this.field.units.remove(this);
+	}
+	
+	public boolean isDead() {
+		return health < 0;
 	}
 
 	public void move(Field dest) {

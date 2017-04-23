@@ -9,7 +9,7 @@ import util.pathfinding.Path;
 @RequiredArgsConstructor
 public class PathfindingTask extends Task {
 	
-	private final Path path;
+	protected final Path path;
 	
 	@Override
 	public void update(float d) {
@@ -20,7 +20,7 @@ public class PathfindingTask extends Task {
 
 	@Override
 	public boolean isFinished() {
-		if(this.getUnit().getField() == path.getDest()) {
+		if(this.getUnit().getField() == path.getDest() || super.isFinished() || !this.path.isStillValid()) {
 			this.getUnit().setVelocity(new Vector3f(0f, 0f, 0f));
 			return true;
 		} else {

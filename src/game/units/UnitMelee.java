@@ -4,19 +4,20 @@ import game.Field;
 
 public class UnitMelee extends Unit {
 
-    public UnitMelee(Alliance alliance, Field startingField) {
-	super(alliance, startingField);
-	this.health = 200;
+	public UnitMelee(Alliance alliance, Field startingField) {
+		super(alliance, startingField);
+		this.health = 200;
+		damage = 50;
     }
 
-    @Override
-    public void update(float d) {
-	super.update(d);
-    }
+	@Override
+	public void update(float d) {
+		super.update(d);
+	}
 
-    @Override
-    public String getModelName() {
-	return "unit0";
-    }
+	@Override
+	public String getModelName() {
+		return "unit0";
+	}
 
 }
