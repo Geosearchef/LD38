@@ -1,5 +1,6 @@
 import de.geosearchef.matella.logging.Log;
 import game.Game;
+import input.Input;
 import rendering.Renderer;
 import update.Updater;
 
@@ -12,7 +13,7 @@ public class StartLD38 {
 		Game.initFieldEntities();
 		Game.initUnits();
 		
-		Updater.init();
+		Input.init();
 		
 		GameLoop.loop();
 

@@ -3,6 +3,7 @@ package rendering;
 import de.geosearchef.matella.entities.Entity;
 import de.geosearchef.matella.models.Model;
 import de.geosearchef.matella.shaders.hook.EntityShaderHook;
+import input.Input;
 import update.Updater;
 import util.pathfinding.Path;
 
@@ -21,10 +22,16 @@ public class LDEntityShaderHook extends EntityShaderHook {
 
 	@Override
 	public void prepareInstance(Entity entity) {
-		if(Updater.getMouseField() != null)
-			((LDEntityShader)shaderProgram).loadHighlight(Updater.getMouseField().getEntity() == entity);
+		if(Input.getMouseField() != null)
+			((LDEntityShader)shaderProgram).loadHighlight(Input.getMouseField().getEntity() == entity);
 		else
 			((LDEntityShader)shaderProgram).loadHighlight(false);
+		
+		if(Input.wallBuildStart != null) {
+			if(Input.wallBuildStart.getEntity() == entity || Input.wallBuildEnd.getEntity() == entity || (Input.wallBuildPath != null && Input.wallBuildPath.getFields().stream().anyMatch(f -> f.getEntity() == entity))) {
+				((LDEntityShader)shaderProgram).loadHighlight(true);
+			}
+		}
 	}
 
 	@Override
