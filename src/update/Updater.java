@@ -5,8 +5,12 @@ import game.Game;
 import game.units.Unit;
 import lombok.Getter;
 import rendering.Renderer;
+import util.pathfinding.Path;
+import util.pathfinding.Pathfinder;
 
 import static game.Game.units;
+
+import org.lwjgl.input.Mouse;
 
 import de.geosearchef.matella.toolbox.EntityIntersection;
 import de.geosearchef.matella.toolbox.MousePicker;
@@ -18,6 +22,7 @@ public class Updater {
 	
 	public static void update(float d) {
 		
+		
 		//Mouse picker
 		mousePicker.updateForMouse();
 		EntityIntersection intersection = mousePicker.getEntityIntersection(Renderer.fieldEntities, null, false);
@@ -25,9 +30,7 @@ public class Updater {
 			mouseField = Game.fields[Integer.parseInt(intersection.getEntity().getName().split(",")[0])][Integer.parseInt(intersection.getEntity().getName().split(",")[1])];
 		}
 		
-		if(mouseField != null)
-			System.out.println(mouseField.getRawPosX() + " " + mouseField.getRawPosY());
-		
+		//Unit update
 		for (Unit u : units) {
 			u.update(d);
 		}

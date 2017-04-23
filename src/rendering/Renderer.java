@@ -82,6 +82,7 @@ public class Renderer {
 				float fieldHeight = (float) noise.eval(field.getPosX() / 4f, field.getPosY() / 4f) * 0.4f;
 				Entity fieldEntity = new Entity(fieldModel,new Vector3f(field.getPosX(), fieldHeight, field.getPosY()), new Vector3f(0f, 0f, 0f), new Vector3f(1f, 1f, 1f), false); 
 //				fieldEntity.setColor(new Vector4f(field.getPosX() / (float) Game.FIELDS_X, field.getPosY() / (float) Game.FIELDS_Y, 0f, 1f));
+				fieldEntity.setColor(field.getType().getColor());
 				fieldEntity.setName(field.getRawPosX() + "," + field.getRawPosY());
 				fieldEntities.add(fieldEntity);
 				
@@ -113,9 +114,9 @@ public class Renderer {
 
 	public static void render(float d) {
 
-//		player.getPosition().y = 8f;
-//		player.getRotation().x = -48f;
-//		player.getRotation().y = 0f;
+		player.getPosition().y = 8f;
+		player.getRotation().x = -48f;
+		player.getRotation().y = 0f;
 
 		camera.updatePosition();
 		lights.get(0).setPosition(new Vector3f(camera.getPosition().x + 50f, lights.get(0).getPosition().y, camera.getPosition().z + 50f));

@@ -82,4 +82,8 @@ public class Field {
 		if(this.entity != null)
 			this.entity.getPosition().y = this.height;
 	}
+	
+	public boolean isPassable() {
+		return this.type != FieldType.WALL && this.type != FieldType.WATER;
+	}
 }

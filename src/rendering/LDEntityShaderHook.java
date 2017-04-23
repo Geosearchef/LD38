@@ -4,6 +4,7 @@ import de.geosearchef.matella.entities.Entity;
 import de.geosearchef.matella.models.Model;
 import de.geosearchef.matella.shaders.hook.EntityShaderHook;
 import update.Updater;
+import util.pathfinding.Path;
 
 public class LDEntityShaderHook extends EntityShaderHook {
 	
