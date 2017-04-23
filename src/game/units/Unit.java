@@ -14,7 +14,8 @@ public abstract class Unit extends Entity {
     private @Getter Alliance alliance;
     private Field field;
     // pos relative to current field's entity
-    private @Getter @Setter Vector3f relativePosition = new Vector3f();
+    private @Getter @Setter Vector3f relativePosition = new Vector3f((float) (Math.random() - 0.5)/2, 0,
+	    (float) (Math.random() - 0.5)/2);
     @Getter
     int health;
 
@@ -37,13 +38,19 @@ public abstract class Unit extends Entity {
 	relativePosition.y += getVelocity().y * d;
 	relativePosition.z += getVelocity().z * d;
 
+	this.setPosition(Vector3f.add(relativePosition, field.getEntity().getPosition(), null));
+	this.getPosition().y = this.field.getHeight();
+
 	// did field change?
-	float distance = Math
-		.abs((this.getPosition().x - this.field.getPosX()) * (this.getPosition().z - this.field.getPosY()));
+	float x = (this.getPosition().x - this.field.getPosX());
+	float y = (this.getPosition().z - this.field.getPosY());
+	float distance = x * x + y * y;
 	Field field = this.field;
 
 	for (Field f : this.field.getNeighbors()) {
-	    float distanceTemp = Math.abs((this.getPosition().x - f.getPosX()) * (this.getPosition().z - f.getPosY()));
+	    x = (this.getPosition().x - f.getPosX());
+	    y = (this.getPosition().z - f.getPosY());
+	    float distanceTemp = x * x + y * y;
 	    if (distanceTemp < distance) {
 		distance = distanceTemp;
 		field = f;
@@ -72,12 +79,10 @@ public abstract class Unit extends Entity {
 	    this.field.units.remove(this);
 	    this.field = field;
 	    this.field.units.add(this);
-	    System.out.println("(" + this.field.getRawPosX() + ", " + this.field.getRawPosY() + ")");
+	    // System.out.println("(" + this.field.getRawPosX() + ", " +
+	    // this.field.getRawPosY() + ")");
 
 	}
-
-	this.setPosition(Vector3f.add(relativePosition, field.getEntity().getPosition(), null));
-	this.getPosition().y = this.field.getHeight();
 
     }
 
