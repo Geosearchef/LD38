@@ -2,11 +2,11 @@ package game.units;
 
 import game.Field;
 
-public class UnitMelee extends Unit {
+public class UnitRanged extends Unit {
 
-    public UnitMelee(Alliance alliance, Field startingField) {
+    public UnitRanged(Alliance alliance, Field startingField) {
 	super(alliance, startingField);
-	this.health = 200;
+	this.health = 100;
     }
 
     @Override
@@ -18,5 +18,4 @@ public class UnitMelee extends Unit {
     public String getModelName() {
 	return "unit0";
     }
-
 }
