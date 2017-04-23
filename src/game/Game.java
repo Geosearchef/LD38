@@ -47,13 +47,12 @@ public class Game {
 //		for (int i = 0; i < 500; i++) {
 //			units.add(new UnitMelee(Alliance.LIGHT, fields[FIELDS_X / 4][FIELDS_Y / 2]));
 //		}
-		// units.add(new UnitMelee(Alliance.LIGHT, fields[FIELDS_X / 4][FIELDS_Y
-		// / 2]));
-		//
-		// units.add(new UnitMelee(Alliance.DARK, fields[3 * FIELDS_X /
-		// 4][FIELDS_Y / 2]));
-		// units.add(new UnitMelee(Alliance.DARK, fields[3 * FIELDS_X /
-		// 4][FIELDS_Y / 2]));
+		
+		units.add(new UnitMelee(Alliance.LIGHT, fields[(int) Alliance.LIGHT.getSpawnPos().x][(int) Alliance.LIGHT.getSpawnPos().y]));
+		units.add(new UnitMelee(Alliance.LIGHT, fields[(int) Alliance.LIGHT.getSpawnPos().x][(int) Alliance.LIGHT.getSpawnPos().y]));
+		
+		units.add(new UnitMelee(Alliance.DARK, fields[(int) Alliance.DARK.getSpawnPos().x][(int) Alliance.DARK.getSpawnPos().y]));
+		units.add(new UnitMelee(Alliance.DARK, fields[(int) Alliance.DARK.getSpawnPos().x][(int) Alliance.DARK.getSpawnPos().y]));
 	}
 
 	// World Gen
