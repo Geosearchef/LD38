@@ -17,7 +17,7 @@ public class Game {
 		// init Fields
 		for (int x = 0; x < FIELDS_X; x++) {
 			for (int y = 0; y < FIELDS_Y; y++) {
-				fields[x][y] = new Field(x, y, FieldType.GRASS);
+				fields[x][y] = new Field(x, y, Math.random() > 0.3f ? FieldType.GRASS : FieldType.WATER);
 			}
 		}
 		// calculate Neighbors
