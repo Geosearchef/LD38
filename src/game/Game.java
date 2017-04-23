@@ -65,10 +65,6 @@ public class Game {
 			for (Field field : fields) {
 				float fieldHeight = (float) noise.eval(field.getPosX() / 4f, field.getPosY() / 4f) * 0.4f;
 				Entity fieldEntity = new Entity(fieldModel, new Vector3f(field.getPosX(), fieldHeight, field.getPosY()), new Vector3f(0f, 0f, 0f), new Vector3f(1f, 1f, 1f), false);
-				// fieldEntity.setColor(new Vector4f(field.getPosX() / (float)
-				// Game.FIELDS_X, field.getPosY() / (float) Game.FIELDS_Y, 0f,
-				// 1f));
-				fieldEntity.setColor(field.getType().getColor());
 				fieldEntity.setName(field.getRawPosX() + "," + field.getRawPosY());
 				rendering.Renderer.fieldEntities.add(fieldEntity);
 
@@ -87,11 +83,49 @@ public class Game {
 
 		for (Field[] fields : Game.fields) {
 			for (Field field : fields) {
-				if (field.getHeight() < -0.15f)
+
+				if (field.getHeight() < -0.165f)
 					field.setType(FieldType.WATER);
-				if (field.getHeight() < 0)
-					field.setType(FieldType.GROUND);
 			}
 		}
+
+		for (Field[] fields : Game.fields) {
+			for (Field field : fields) {
+				if (field.getType() != FieldType.WATER) {
+
+					waterSandSearch: if (field.getHeight() < -0.05) {
+						for (Field f : field.getNeighbors()) {
+							if (f.getType() == FieldType.WATER || f.getType() == FieldType.SAND) {
+								field.setType(FieldType.SAND);
+								break waterSandSearch;
+							}
+						}
+					}
+
+				}
+			}
+		}
+
+		for (Field[] fields : Game.fields) {
+			for (Field field : fields) {
+
+				if (field.getType() != FieldType.WATER) {
+
+					waterSandSearch: if (field.getHeight() < -0.05) {
+						for (Field f : field.getNeighbors()) {
+							if (f.getType() == FieldType.WATER) {
+								field.setType(FieldType.SAND);
+								break waterSandSearch;
+							}
+						}
+						field.setType(FieldType.GROUND);
+					}
+
+				}
+
+				field.getEntity().setColor(field.getType().getColor());
+			}
+		}
+
 	}
 }

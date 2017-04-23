@@ -80,15 +80,15 @@ public class Renderer {
 
 	public static List<Model> models = new LinkedList<Model>();
 	public static List<Light> lights = new LinkedList<Light>();
-	public static WaterTile waterTile = new WaterTile(new Vector3f(0f, -0.4f, 0f), 100f);
+	public static WaterTile waterTile = new WaterTile(new Vector3f(0f, -0.25f, 0f), 100f);
 	public static Model fieldModel;
 	public static List<Entity> fieldEntities = new LinkedList<Entity>();
 
 	public static void render(float d) {
 
-//		player.getPosition().y = 8f;
-//		player.getRotation().x = -48f;
-//		player.getRotation().y = 0f;
+		player.getPosition().y = 8f;
+		player.getRotation().x = -48f;
+		player.getRotation().y = 0f;
 
 		camera.updatePosition();
 		lights.get(1).setPosition(new Vector3f(camera.getPosition().x + 50f, lights.get(0).getPosition().y, camera.getPosition().z + 50f));
