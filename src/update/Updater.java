@@ -46,6 +46,12 @@ public class Updater {
 				scheduled.poll().run();
 		}
 		
+		for(Field[] fields: Game.fields){
+			for(Field f: fields){
+				f.update(d);
+			}
+		}
+		
 //		if(nextUnit < System.currentTimeMillis()) {
 //			nextUnit += UNIT_SPAWN_COOLDOWN;
 //			
