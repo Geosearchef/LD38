@@ -108,10 +108,61 @@ public class Field {
 		if (this.entity != null)
 			this.entity.getPosition().y = this.height + (this.type == FieldType.WALL ? 0.8f : 0f);
 	}
-	
+
 	public void setType(FieldType type) {
 		this.type = type;
+		if (type == FieldType.FARMLAND)
+			plantingCycle = 0;
 		this.setHeight(this.getHeight());
 		this.getEntity().setColor(type.getColor());
+	}
+
+	// Farmland
+	private static final float GROWTH_STATE_DURATION = 1f;
+	private static final int MAX_PLANTING_CYCLES = 3;
+
+	private enum GrowthState {
+		GROWTH_STATE_0(0), GROWTH_STATE_1(1), GROWTH_STATE_2(2), FULLY_GROWN(3);
+
+		public final int index;
+
+		GrowthState(int index) {
+			this.index = index;
+		}
+	}
+
+	private GrowthState growthState = null;
+	private float timePlanted = 0;
+	private int plantingCycle = 0;
+
+	public void update(float d) {
+
+		if (type == FieldType.FARMLAND) {
+
+			if (growthState != null && growthState != GrowthState.FULLY_GROWN) {
+				this.timePlanted += d;
+				if (this.timePlanted > GROWTH_STATE_DURATION) {
+					this.growthState = GrowthState.values()[this.growthState.index];
+					this.timePlanted = 0;
+				}
+			}
+
+		}
+	}
+
+	public void plantWheat() {
+		if (type == FieldType.FARMLAND) {
+			plantingCycle++;
+			if (plantingCycle > MAX_PLANTING_CYCLES) {
+				this.setType(FieldType.GRASS);
+			} else {
+				this.growthState = GrowthState.GROWTH_STATE_0;
+				this.timePlanted = 0;
+			}
+		}
+	}
+
+	public void harvest() {
+		this.growthState=null;
 	}
 }
