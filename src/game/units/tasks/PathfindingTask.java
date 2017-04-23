@@ -9,7 +9,7 @@ import util.pathfinding.Path;
 @RequiredArgsConstructor
 public class PathfindingTask extends Task {
 	
-	private final Path path;
+	protected final Path path;
 	
 	@Override
 	public void update(float d) {

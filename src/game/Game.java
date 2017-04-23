@@ -44,9 +44,9 @@ public class Game {
 	}
 
 	public static void initUnits() {
-		for (int i = 0; i < 500; i++) {
-			units.add(new UnitMelee(Alliance.LIGHT, fields[FIELDS_X / 4][FIELDS_Y / 2]));
-		}
+//		for (int i = 0; i < 500; i++) {
+//			units.add(new UnitMelee(Alliance.LIGHT, fields[FIELDS_X / 4][FIELDS_Y / 2]));
+//		}
 		// units.add(new UnitMelee(Alliance.LIGHT, fields[FIELDS_X / 4][FIELDS_Y
 		// / 2]));
 		//
