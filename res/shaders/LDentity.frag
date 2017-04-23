@@ -85,7 +85,7 @@ float ShadowCalculation(vec4 fragPosLightSpace, vec3 unitNormal, vec3 lightDir)
 void main(void)
 {	
 	vec4 textureColor = texture(textureSampler, pass_textureCoords);
-	if(textureColor.a < 0.5)
+	if(textureColor.a < 0.5 || color.a < 0.5)
 		discard;
 	
 	
