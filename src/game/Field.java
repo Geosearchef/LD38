@@ -103,4 +103,9 @@ public class Field {
     public boolean isPassable() {
 	return this.type != FieldType.WALL && this.type != FieldType.WATER;
     }
+    
+    @Override
+    public String toString() {
+    	return "[" + getRawPosX() + "|" + getRawPosY() + "]";
+    }
 }

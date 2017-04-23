@@ -115,8 +115,8 @@ public class Renderer {
 
 	public static void render(float d) {
 
-////		4wplayer.getPosition().y = 8f;
-////		player.getRotation().x = -48f;
+//		player.getPosition().y = 8f;
+//		player.getRotation().x = -48f;
 //		player.getRotation().y = 0f;
 
 		camera.updatePosition();
@@ -163,7 +163,9 @@ public class Renderer {
 
 		List<Entity> entities = new LinkedList<Entity>();
 		entities.addAll(fieldEntities);
-		entities.addAll(Game.units);
+		synchronized (Game.units) {
+			entities.addAll(Game.units);
+		}
 
 		List<WaterTile> waterTiles = new LinkedList<WaterTile>();
 		waterTiles.add(waterTile);

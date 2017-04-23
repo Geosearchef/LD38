@@ -31,8 +31,10 @@ public class Updater {
 		}
 		
 		//Unit update
-		for (Unit u : Game.units) {
-			u.update(d);
+		synchronized (Game.units) {
+			for (Unit u : Game.units) {
+				u.update(d);
+			}
 		}
 	}
 	
