@@ -82,8 +82,8 @@ public class Renderer {
 			for (Field field : fields) {
 				float fieldHeight = (float) noise.eval(field.getPosX() / 4f, field.getPosY() / 4f) * 0.4f;
 				Entity fieldEntity = new Entity(fieldModel,new Vector3f(field.getPosX(), fieldHeight, field.getPosY()), new Vector3f(0f, 0f, 0f), new Vector3f(1f, 1f, 1f), false); 
-				fieldEntity.setColor(new Vector4f(field.getPosX() / (float) Game.FIELDS_X, field.getPosY() / (float) Game.FIELDS_Y, 0f, 1f));
-				fieldEntity.setName(field.getRawPosX() + "|" + field.getRawPosY());
+//				fieldEntity.setColor(new Vector4f(field.getPosX() / (float) Game.FIELDS_X, field.getPosY() / (float) Game.FIELDS_Y, 0f, 1f));
+				fieldEntity.setName(field.getRawPosX() + "," + field.getRawPosY());
 				fieldEntities.add(fieldEntity);
 				
 				field.setEntity(fieldEntity);
@@ -108,15 +108,15 @@ public class Renderer {
 
 	public static List<Model> models = new LinkedList<Model>();
 	public static List<Light> lights = new LinkedList<Light>();
-	public static WaterTile waterTile = new WaterTile(new Vector3f(0f, -0.5f, 0f), 100f);
+	public static WaterTile waterTile = new WaterTile(new Vector3f(0f, -1f, 0f), 100f);
 	public static Model fieldModel;
 	public static List<Entity> fieldEntities = new LinkedList<Entity>();
 
 	public static void render(float d) {
 
-		player.getPosition().y = 8f;
-		player.getRotation().x = -48f;
-		player.getRotation().y = 0f;
+//		player.getPosition().y = 8f;
+//		player.getRotation().x = -48f;
+//		player.getRotation().y = 0f;
 
 		camera.updatePosition();
 		lights.get(0).setPosition(new Vector3f(camera.getPosition().x + 50f, lights.get(0).getPosition().y, camera.getPosition().z + 50f));
@@ -152,8 +152,7 @@ public class Renderer {
 		waterTiles.add(waterTile);
 
 		GPUProfiler.startFrame();
-		renderer.fullRender(null, entities, Collections.<Terrain>emptyList(), lights, waterTiles, 0f, camera, null,
-				null);
+		renderer.fullRender(null, entities, Collections.<Terrain>emptyList(), lights, waterTiles, 2f, camera, null, null);
 		GPUProfiler.endFrame();
 		GPUProfiler.dumpFrames();
 	}
