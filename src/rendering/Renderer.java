@@ -65,6 +65,7 @@ public class Renderer {
 	
 	public static FontRenderer fontRenderer;
 	public static Font font;
+	public static final float FONT_WIDTH_FACTOR = 0.6f;
 
 	public static void init() {
 
@@ -76,7 +77,7 @@ public class Renderer {
 		
 		guiRenderer = new GuiRenderer(loader);
 		fontRenderer = new FontRenderer(loader);
-		font = new Font("simple", loader, 0.3f, 0.1f, 0.5f, 0.15f, new Vector3f(1, 1, 1), new Vector3f(0, 0, 0));
+		font = new Font("consolas", loader, 0.5f, 0.1f, 0.6f, 0.15f, new Vector3f(1, 1, 1), new Vector3f(0, 0, 0));
 
 		player = new Player(null, new Vector3f(24, 0, 30), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1), false);
 		player.setMovementSpeed(10);
@@ -206,15 +207,15 @@ public class Renderer {
 		
 		fontRenderer.begin();
 		
-		fontRenderer.render("" + meleeLight, font, Font.LEFT, new Vector2f(-0.94f, -0.95f), 0f, 0.03f, 1f);
-		fontRenderer.render("" + rangedLight, font, Font.LEFT, new Vector2f(-0.94f, -0.85f), 0f, 0.03f, 1f);
-		fontRenderer.render("" + farmerLight, font, Font.LEFT, new Vector2f(-0.94f, -0.75f), 0f, 0.03f, 1f);
+		fontRenderer.render("" + meleeLight, font, Font.LEFT, new Vector2f(-0.94f, -0.95f), 0f, 0.03f, FONT_WIDTH_FACTOR, 1f);
+		fontRenderer.render("" + rangedLight, font, Font.LEFT, new Vector2f(-0.94f, -0.85f), 0f, 0.03f, FONT_WIDTH_FACTOR, 1f);
+		fontRenderer.render("" + farmerLight, font, Font.LEFT, new Vector2f(-0.94f, -0.75f), 0f, 0.03f, FONT_WIDTH_FACTOR, 1f);
 		
-		fontRenderer.render("" + meleeDark, font, Font.RIGHT, new Vector2f(0.94f, -0.95f), 0f, 0.03f, 1f);
-		fontRenderer.render("" + rangedDark, font, Font.RIGHT, new Vector2f(0.94f, -0.85f), 0f, 0.03f, 1f);
-		fontRenderer.render("" + farmerDark, font, Font.RIGHT, new Vector2f(0.94f, -0.75f), 0f, 0.03f, 1f);
+		fontRenderer.render("" + meleeDark, font, Font.RIGHT, new Vector2f(0.94f, -0.95f), 0f, 0.03f, FONT_WIDTH_FACTOR, 1f);
+		fontRenderer.render("" + rangedDark, font, Font.RIGHT, new Vector2f(0.94f, -0.85f), 0f, 0.03f, FONT_WIDTH_FACTOR, 1f);
+		fontRenderer.render("" + farmerDark, font, Font.RIGHT, new Vector2f(0.94f, -0.75f), 0f, 0.03f, FONT_WIDTH_FACTOR, 1f);
 		
-		fontRenderer.render((Game.gameFinish == 0 ? ((- Game.gameStart + System.currentTimeMillis()) / 1000) : ((- Game.gameStart + Game.gameFinish) / 1000)) + " secs", font, Font.CENTER, new Vector2f(0f, Game.gameFinish == 0 ? -0.95f : 0f), 0f, 0.03f, 1f);
+		fontRenderer.render((Game.gameFinish == 0 ? ((- Game.gameStart + System.currentTimeMillis()) / 1000) : ((- Game.gameStart + Game.gameFinish) / 1000)) + " secs", font, Font.CENTER, new Vector2f(0f, Game.gameFinish == 0 ? -0.95f : 0f), 0f, 0.03f, 1f, 1f);
 		
 		fontRenderer.end();
 	}
