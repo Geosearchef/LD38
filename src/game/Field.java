@@ -113,7 +113,7 @@ public class Field {
 
 	public void setType(FieldType type) {
 		if (type == FieldType.FARMLAND) {
-			plantingCycle = 0;
+//			plantingCycle = 0;
 			this.setGrowthState(GrowthState.GROWTH_STATE_0);
 		}else{
 			this.setGrowthState(null);
@@ -125,7 +125,7 @@ public class Field {
 
 	// Farmland
 	private static final float GROWTH_STATE_DURATION = 1f;
-	private static final int MAX_PLANTING_CYCLES = 3;
+//	private static final int MAX_PLANTING_CYCLES = 3;
 	private static final int FOOD_PER_HARVEST = 25;
 
 	private enum GrowthState {
@@ -142,7 +142,7 @@ public class Field {
 
 	private GrowthState growthState = null;
 	private float timePlanted = 0;
-	private int plantingCycle = 0;
+//	private int plantingCycle = 0;
 
 	public void update(float d) {
 
@@ -151,7 +151,6 @@ public class Field {
 			if (growthState != null && growthState != GrowthState.FULLY_GROWN) {
 				this.timePlanted += d;
 				if (this.timePlanted > GROWTH_STATE_DURATION) {
-					// System.out.println("Updating GROWTH!");
 					int index=this.growthState.index + 1;
 					if(index>=GrowthState.values().length){
 						this.setGrowthState(GrowthState.FULLY_GROWN);
@@ -167,7 +166,7 @@ public class Field {
 
 	public void plantWheat() {
 		if (type == FieldType.FARMLAND) {
-			plantingCycle++;
+//			plantingCycle++;
 			this.setGrowthState(GrowthState.GROWTH_STATE_0);
 			this.timePlanted = 0;
 		}
@@ -175,8 +174,8 @@ public class Field {
 
 	public void harvest(Alliance alliance) {
 		this.setGrowthState(null);
-		if (plantingCycle == MAX_PLANTING_CYCLES)
-			this.setType(FieldType.GRASS);
+//		if (plantingCycle == MAX_PLANTING_CYCLES)
+//			this.setType(FieldType.GRASS);
 		game.ResourceManager.changeFoodCount(alliance, FOOD_PER_HARVEST);
 	}
 
