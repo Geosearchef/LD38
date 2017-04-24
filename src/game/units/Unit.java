@@ -61,7 +61,7 @@ public abstract class Unit extends Entity {
 			this.relativePosition.z += Game.MAP_SIZE_Y;
 
 		this.setPosition(Vector3f.add(relativePosition, field.getEntity().getPosition(), null));
-		this.getPosition().y += (this.field.getHeight() - this.getPosition().y) * d * 3f;
+		this.getPosition().y += (this.field.getHeight() - this.getPosition().y) * d * 7f;
 
 		// did field change?
 		float x = (this.getPosition().x - this.field.getPosX());
