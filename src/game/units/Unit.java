@@ -1,5 +1,8 @@
 package game.units;
 
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -10,6 +13,7 @@ import de.geosearchef.matella.entities.Entity;
 import game.Field;
 import game.Game;
 import game.units.tasks.AICalculation;
+import game.units.tasks.MarriageTask;
 import game.units.tasks.Task;
 import lombok.Getter;
 import lombok.Setter;
@@ -121,6 +125,8 @@ public abstract class Unit extends Entity {
 		} else if (this.task == null && this.aiCalculation.isDone()) {
 			try {
 				this.task = aiCalculation.get();
+				if(task instanceof MarriageTask)
+					((MarriageTask)task).initFromRequester();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -128,6 +134,9 @@ public abstract class Unit extends Entity {
 			if (this.task != null)
 				this.task.setUnit(this);
 		}
+		
+//		if(this.getVelocity().length() == 0)
+//			System.out.println(Optional.ofNullable(task).map(t -> t.getClass() + "").orElse("null"));
 	}
 
 	public abstract String getModelName();
@@ -158,4 +167,27 @@ public abstract class Unit extends Entity {
 	}
 
 	private static Vector3f[] movementDest = new Vector3f[] { new Vector3f((float) 0.5f * Field.DIMENSIONS.y * (float) Math.sqrt(0.75), 0, (float) Math.sqrt(3) / 2f * Field.DIMENSIONS.y * (float) Math.sqrt(0.75) * (-1f)), new Vector3f(1, 0, 0), new Vector3f((float) 0.5f * Field.DIMENSIONS.y * (float) Math.sqrt(0.75), 0, (float) Math.sqrt(3) / 2f * Field.DIMENSIONS.y * (float) Math.sqrt(0.75)), new Vector3f((float) 0.5f * Field.DIMENSIONS.y * (float) Math.sqrt(0.75) * (-1f), 0, (float) Math.sqrt(3) / 2f * Field.DIMENSIONS.y * (float) Math.sqrt(0.75)), new Vector3f(-1, 0, 0), new Vector3f((float) 0.5f * Field.DIMENSIONS.y * (float) Math.sqrt(0.75) * (-1f), 0, (float) Math.sqrt(3) / 2f * Field.DIMENSIONS.y * (float) Math.sqrt(0.75) * (-1f)) };
+	
+	
+	
+	
+	
+	
+	public static float distance(Unit u1, Unit u2) {
+		Set<Vector3f> u2Pos = new HashSet<Vector3f>();
+		u2Pos.add(u2.getPosition());
+		u2Pos.add(Vector3f.add(u2.getPosition(), new Vector3f(+Game.MAP_SIZE_X, 0f, 0f), null));
+		u2Pos.add(Vector3f.add(u2.getPosition(), new Vector3f(-Game.MAP_SIZE_X, 0f, 0f), null));
+		u2Pos.add(Vector3f.add(u2.getPosition(), new Vector3f(0f, 0f, +Game.MAP_SIZE_X), null));
+		u2Pos.add(Vector3f.add(u2.getPosition(), new Vector3f(0f, 0f, -Game.MAP_SIZE_X), null));
+		u2Pos.add(Vector3f.add(u2.getPosition(), new Vector3f(+Game.MAP_SIZE_X, 0f, +Game.MAP_SIZE_Y), null));
+		u2Pos.add(Vector3f.add(u2.getPosition(), new Vector3f(+Game.MAP_SIZE_X, 0f, -Game.MAP_SIZE_Y), null));
+		u2Pos.add(Vector3f.add(u2.getPosition(), new Vector3f(-Game.MAP_SIZE_X, 0f, -Game.MAP_SIZE_Y), null));
+		u2Pos.add(Vector3f.add(u2.getPosition(), new Vector3f(-Game.MAP_SIZE_X, 0f, +Game.MAP_SIZE_Y), null));
+		return (float) u2Pos.stream().mapToDouble(pos -> Vector3f.sub(pos, u1.getPosition(), null).length()).min().orElse(Float.MAX_VALUE);
+	}
+	
+	public float distance(Unit u2) {
+		return distance(this, u2);
+	}
 }

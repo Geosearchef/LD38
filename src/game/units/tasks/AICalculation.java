@@ -33,30 +33,34 @@ public class AICalculation {
 			enemyUnits = Game.units.stream()
 					.filter(u -> u.getAlliance() != unit.getAlliance())
 					.collect(Collectors.toList());
-			Collections.sort(enemyUnits, (Unit u1, Unit u2) -> new Float(Vector3f.sub(u1.getPosition(), unit.getPosition(), null).lengthSquared()).compareTo(Vector3f.sub(u2.getPosition(), unit.getPosition(), null).lengthSquared()));//TODO: not working, use pathfinder for repeat!!
+			Collections.sort(enemyUnits, (Unit u1, Unit u2) -> new Float(u1.distance(unit)).compareTo(u2.distance(unit)));
 			
 			allyUnits.removeAll(enemyUnits);
 			allyUnits.remove(unit);
-			Collections.sort(allyUnits, (Unit u1, Unit u2) -> new Float(Vector3f.sub(u1.getPosition(), unit.getPosition(), null).lengthSquared()).compareTo(Vector3f.sub(u2.getPosition(), unit.getPosition(), null).lengthSquared()));//TODO: not working, use pathfinder for repeat!!
+			Collections.sort(allyUnits, (Unit u1, Unit u2) -> new Float(u1.distance(unit)).compareTo(u2.distance(unit)));
 		}
 		
-		if(enemyUnits.isEmpty())
+		if(enemyUnits.isEmpty()) {
+			if(Game.gameFinish == 0)
+				Game.gameFinish = System.currentTimeMillis();
 			return null;
+		}
 		
 		
+		//TODO: marriage task: WaitingForMarriageTask?
 		float needToMate = 0.25f;
 		if(allyUnits.size() < 20) needToMate += 0.2f;
-		if(allyUnits.size() >= 2) needToMate += Math.max(0f, 1f - Math.max(1f, Vector3f.sub(allyUnits.get(0).getPosition(), unit.getPosition(), null).length() / 10f)) / 5f;
+		if(allyUnits.size() >= 2) needToMate += Math.max(0f, 1f - Math.max(1f, allyUnits.get(0).distance(unit) / 10f)) / 5f;
 		if((float)allyUnits.size() / (float)enemyUnits.size() < 0.75) needToMate += 0.15f;
-		if(Math.random() < needToMate) {//TODO: not working, use pathfinder for repeat!!   METHOD FOR DISTANCE BETWEEN UNITS USING PATHFINDER
+		if(allyUnits.size() > 100) needToMate -= 100f;
+		if(Math.random() < needToMate) {
 			for(Unit ally : allyUnits) {
-				if(ally.getTask() == null) {
-					ally.setAiCalculation(null);
+				if(ally.getTask() == null || !(ally.getTask() instanceof MarriageTask)) {
 					MarriageTask allyTask = new MarriageTask(Pathfinder.getPath(unit.getField(), ally.getField()).get(), unit);
 					allyTask.setUnit(ally);
 					MarriageTask ownTask = new MarriageTask(Pathfinder.getPath(unit.getField(), ally.getField()).get(), ally);
 					ally.setTask(allyTask);
-					ally.setAiCalculation(null);
+					ally.setVelocity(new Vector3f(0f, 0f, 0f));
 					return ownTask;
 				}
 			}

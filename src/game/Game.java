@@ -26,7 +26,10 @@ public class Game {
 
 	public static Field[][] fields = new Field[FIELDS_X][FIELDS_Y];
 	public static List<Unit> units = new ArrayList<Unit>();
-
+	
+	public static long gameStart;
+	public static volatile long gameFinish = 0;
+	
 	public static void init() {
 		// init Fields
 		for (int x = 0; x < FIELDS_X; x++) {
@@ -40,7 +43,8 @@ public class Game {
 				fields[x][y].calculateNeighbors(fields);
 			}
 		}
-
+		
+		gameStart = System.currentTimeMillis();
 	}
 
 	public static void initUnits() {

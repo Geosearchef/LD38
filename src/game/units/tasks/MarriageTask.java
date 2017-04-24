@@ -22,8 +22,15 @@ public class MarriageTask extends PathfindingTask {
 		this.partner = partner;
 	}
 	
+	public void initFromRequester() {
+		partner.setAiCalculation(null);
+	}
+	
 	@Override
 	public void update(float d) {
+		if(getUnit().getVelocity().lengthSquared() == 0)
+			setValidUntil(birthTime + 100);
+		
 		if(partner.getField() == getUnit().getField() && !(partner.getTask() instanceof MarriageTask && ((MarriageTask)partner.getTask()).birthTime != 0)) {
 			this.getUnit().setVelocity(new Vector3f(0f, 0f, 0f));
 			birthTime = System.currentTimeMillis() + 2000l;
@@ -49,7 +56,7 @@ public class MarriageTask extends PathfindingTask {
 			}
 		}
 		
-		if(!(partner.getTask() instanceof MarriageTask) || (partner.getTask() instanceof MarriageTask && ((MarriageTask)partner.getTask()).birthTime != 0) || !Game.units.contains(partner)) {
+		if(getValidUntil() < System.currentTimeMillis() || !(partner.getTask() instanceof MarriageTask) || (partner.getTask() instanceof MarriageTask && ((MarriageTask)partner.getTask()).birthTime != 0) || !Game.units.contains(partner)) {
 			this.getUnit().setVelocity(new Vector3f(0f, 0f, 0f));
 			return true;
 		} else {
