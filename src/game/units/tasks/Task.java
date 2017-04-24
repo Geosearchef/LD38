@@ -8,7 +8,7 @@ import lombok.Setter;
 @Data
 public abstract class Task {
 	
-	private long validUntil = System.currentTimeMillis() + 10000l;
+	private long validUntil = System.currentTimeMillis() + 3000l;
 	private Unit unit;
 	
 	public abstract void update(float d);

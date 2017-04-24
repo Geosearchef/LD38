@@ -1,6 +1,7 @@
 package game.units;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -12,6 +13,7 @@ import de.geosearchef.matella.entities.Entity;
 import game.Field;
 import game.Game;
 import game.units.tasks.AICalculation;
+import game.units.tasks.MarriageTask;
 import game.units.tasks.Task;
 import lombok.Getter;
 import lombok.Setter;
@@ -123,6 +125,8 @@ public abstract class Unit extends Entity {
 		} else if (this.task == null && this.aiCalculation.isDone()) {
 			try {
 				this.task = aiCalculation.get();
+				if(task instanceof MarriageTask)
+					((MarriageTask)task).initFromRequester();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -130,6 +134,9 @@ public abstract class Unit extends Entity {
 			if (this.task != null)
 				this.task.setUnit(this);
 		}
+		
+//		if(this.getVelocity().length() == 0)
+//			System.out.println(Optional.ofNullable(task).map(t -> t.getClass() + "").orElse("null"));
 	}
 
 	public abstract String getModelName();

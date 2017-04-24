@@ -13,6 +13,8 @@ import org.lwjgl.util.vector.Vector4f;
 
 import de.geosearchef.matella.entities.Entity;
 import de.geosearchef.matella.entities.Player;
+import de.geosearchef.matella.fonts.Font;
+import de.geosearchef.matella.fonts.FontRenderer;
 import de.geosearchef.matella.guis.GuiRenderer;
 import de.geosearchef.matella.models.Model;
 import de.geosearchef.matella.models.ModelLoader;
@@ -26,6 +28,11 @@ import de.geosearchef.matella.terrains.Terrain;
 import de.geosearchef.matella.water.WaterTile;
 import game.Field;
 import game.Game;
+import game.units.Alliance;
+import game.units.Unit;
+import game.units.UnitFarmer;
+import game.units.UnitMelee;
+import game.units.UnitRanged;
 import input.Input;
 import lombok.Getter;
 import lombok.NonNull;
@@ -55,6 +62,9 @@ public class Renderer {
 	public static int farmerIcon;
 	public static int farmModeIcon;
 	public static int wallModeIcon;
+	
+	public static FontRenderer fontRenderer;
+	public static Font font;
 
 	public static void init() {
 
@@ -65,8 +75,10 @@ public class Renderer {
 		GPUProfiler.setPROFILING_ENABLED(false);
 		
 		guiRenderer = new GuiRenderer(loader);
+		fontRenderer = new FontRenderer(loader);
+		font = new Font("simple", loader, 0.3f, 0.1f, 0.5f, 0.15f, new Vector3f(1, 1, 1), new Vector3f(0, 0, 0));
 
-		player = new Player(null, new Vector3f(0, 0, 0), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1), false);
+		player = new Player(null, new Vector3f(24, 0, 36), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1), false);
 		player.setMovementSpeed(10);
 		player.setCtrlMultiplier(1);
 		camera = new Camera(player);
@@ -172,6 +184,39 @@ public class Renderer {
 		guiRenderer.render(wallModeIcon, new Vector2f(-0.95f, 0.93f), 0f, new Vector2f(0.05f * aspect, 0.05f), Input.wallBuildMode ? new Vector4f(1f, 1f, 1f, 1f) : new Vector4f(0.7f, 0.7f, 0.7f, 1f));
 		
 		guiRenderer.end();
+		
+		
+		
+		int meleeLight = 0, rangedLight = 0, farmerLight = 0;
+		int meleeDark = 0, rangedDark = 0, farmerDark = 0;
+		
+		synchronized (Game.units) {
+			for(Unit unit : Game.units) {
+				if(unit.getAlliance() == Alliance.LIGHT) {
+					if(unit instanceof UnitMelee) meleeLight++;
+					if(unit instanceof UnitRanged) rangedLight++;
+					if(unit instanceof UnitFarmer) farmerLight++;
+				} else {
+					if(unit instanceof UnitMelee) meleeDark++;
+					if(unit instanceof UnitRanged) rangedDark++;
+					if(unit instanceof UnitFarmer) farmerDark++;
+				}
+			}
+		}
+		
+		fontRenderer.begin();
+		
+		fontRenderer.render("" + meleeLight, font, Font.LEFT, new Vector2f(-0.94f, -0.95f), 0f, 0.03f, 1f);
+		fontRenderer.render("" + rangedLight, font, Font.LEFT, new Vector2f(-0.94f, -0.85f), 0f, 0.03f, 1f);
+		fontRenderer.render("" + farmerLight, font, Font.LEFT, new Vector2f(-0.94f, -0.75f), 0f, 0.03f, 1f);
+		
+		fontRenderer.render("" + meleeDark, font, Font.RIGHT, new Vector2f(0.94f, -0.95f), 0f, 0.03f, 1f);
+		fontRenderer.render("" + rangedDark, font, Font.RIGHT, new Vector2f(0.94f, -0.85f), 0f, 0.03f, 1f);
+		fontRenderer.render("" + farmerDark, font, Font.RIGHT, new Vector2f(0.94f, -0.75f), 0f, 0.03f, 1f);
+		
+		fontRenderer.render((Game.gameFinish == 0 ? ((- Game.gameStart + System.currentTimeMillis()) / 1000) : ((- Game.gameStart + Game.gameFinish) / 1000)) + " secs", font, Font.CENTER, new Vector2f(0f, Game.gameFinish == 0 ? -0.95f : 0f), 0f, 0.03f, 1f);
+		
+		fontRenderer.end();
 	}
 
 	public static void loadAssets() {
