@@ -33,11 +33,11 @@ public class AICalculation {
 			enemyUnits = Game.units.stream()
 					.filter(u -> u.getAlliance() != unit.getAlliance())
 					.collect(Collectors.toList());
-			Collections.sort(enemyUnits, (Unit u1, Unit u2) -> new Float(Vector3f.sub(u1.getPosition(), unit.getPosition(), null).lengthSquared()).compareTo(Vector3f.sub(u2.getPosition(), unit.getPosition(), null).lengthSquared()));//TODO: not working, use pathfinder for repeat!!
+			Collections.sort(enemyUnits, (Unit u1, Unit u2) -> new Float(u1.distance(unit)).compareTo(u2.distance(unit)));
 			
 			allyUnits.removeAll(enemyUnits);
 			allyUnits.remove(unit);
-			Collections.sort(allyUnits, (Unit u1, Unit u2) -> new Float(Vector3f.sub(u1.getPosition(), unit.getPosition(), null).lengthSquared()).compareTo(Vector3f.sub(u2.getPosition(), unit.getPosition(), null).lengthSquared()));//TODO: not working, use pathfinder for repeat!!
+			Collections.sort(allyUnits, (Unit u1, Unit u2) -> new Float(u1.distance(unit)).compareTo(u2.distance(unit)));
 		}
 		
 		if(enemyUnits.isEmpty())
