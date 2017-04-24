@@ -44,6 +44,7 @@ public class AICalculation {
 			return null;
 		
 		
+		//TODO: marriage task: WaitingForMarriageTask?
 		float needToMate = 0.25f;
 		if(allyUnits.size() < 20) needToMate += 0.2f;
 		if(allyUnits.size() >= 2) needToMate += Math.max(0f, 1f - Math.max(1f, Vector3f.sub(allyUnits.get(0).getPosition(), unit.getPosition(), null).length() / 10f)) / 5f;
