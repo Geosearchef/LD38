@@ -6,12 +6,18 @@ public class UnitFarmer extends Unit {
 
 	public UnitFarmer(Alliance alliance, Field startingField) {
 		super(alliance, startingField);
-		// TODO Auto-generated constructor stub
+		this.health = 250;
+		this.damage = 0;
 	}
-
+	
+	@Override
+	public void update(float d) {
+		super.update(d);
+	}
+	
 	@Override
 	public String getModelName() {
-		return null;
+		return "unit2";
 	}
 
 }

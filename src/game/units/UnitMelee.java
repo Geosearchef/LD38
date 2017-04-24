@@ -7,7 +7,7 @@ public class UnitMelee extends Unit {
 	public UnitMelee(Alliance alliance, Field startingField) {
 		super(alliance, startingField);
 		this.health = 200;
-		damage = 50;
+		this.damage = 50;
     }
 
 	@Override
