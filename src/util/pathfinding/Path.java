@@ -57,4 +57,9 @@ public class Path {
 		Collections.reverse(newList);
 		return new Path(newList);
 	}
+	
+	public void removeDest() {
+		if(this.fields.size() >= 2)
+			this.fields.remove(this.fields.size() - 1);
+	}
 }

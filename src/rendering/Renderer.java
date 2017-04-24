@@ -222,6 +222,8 @@ public class Renderer {
 
 	public static void loadAssets() {
 		models.add(ModelLoader.loadModel("unit0", loader, null));
+		models.add(ModelLoader.loadModel("unit1", loader, null));
+		models.add(ModelLoader.loadModel("unit2", loader, null));
 		
 		meleeIcon = loader.loadGUITexture("gui/square");
 		rangedIcon = loader.loadGUITexture("gui/ranged");

@@ -14,6 +14,7 @@ import game.Field;
 import game.Game;
 import game.units.Alliance;
 import game.units.Unit;
+import game.units.UnitFarmer;
 import game.units.UnitMelee;
 import game.units.UnitRanged;
 import lombok.Data;
@@ -81,6 +82,20 @@ public class AICalculation {
 			}
 		}
 		
+		if(unit instanceof UnitRanged) {
+			if(enemyUnits.get(0).getField() == unit.getField() || Stream.of(enemyUnits.get(0).getField().getNeighbors()).anyMatch(f -> unit.getField() == f) || Stream.of(enemyUnits.get(0).getField().getNeighbors()).flatMap(f -> Stream.of(f.getNeighbors())).anyMatch(f -> unit.getField() == f))
+				return new RangedAttackTask(enemyUnits.get(0));
+			
+			for(Unit target : enemyUnits) {
+				Optional<Path> path = Pathfinder.getPath(unit.getField(), target.getField());
+				if(path.isPresent()) {
+					path.get().removeDest();//ranged, can skip two fields
+					path.get().removeDest();
+					return new TargetUnitTask(target, path.get());
+				}
+			}
+		}
+		
 		
 		
 		//ELSE
@@ -94,7 +109,7 @@ public class AICalculation {
 	
 	
 	public static TeamComposition getTeamComposition(Alliance alliance) {
-		return new TeamComposition(1.0f, 0.0f);
+		return new TeamComposition(0.6f, 0.2f, 0.2f);
 	}
 	
 	
@@ -102,6 +117,7 @@ public class AICalculation {
 	public static class TeamComposition {
 		private final float melee;
 		private final float ranged;
+		private final float farmer;
 		
 		public Class<?> getUnitClass() {
 			float rand = (float) Math.random();
@@ -113,6 +129,10 @@ public class AICalculation {
 			if(rand < ranged)
 				return UnitRanged.class;
 			rand -= ranged;
+			
+			if(rand < farmer)
+				return UnitFarmer.class;
+			rand -= farmer;
 			
 			return null;
 		}
