@@ -17,10 +17,10 @@ import util.pathfinding.Path;
 import util.pathfinding.Pathfinder;
 
 public class Input {
-	
+
 	private static MousePicker mousePicker;
 	private static @Getter Field mouseField = null;
-	
+
 	public static boolean wallBuildMode = false;
 	public static boolean farmlandBuildMode = false;
 	public static Field wallBuildStart = null;
@@ -28,37 +28,42 @@ public class Input {
 	public static Path wallBuildPath = null;
 
 	public static void input(float d) {
+
 		Renderer.player.checkForInput(d);
 
 		// Mouse picker
 		mousePicker.updateForMouse();
 		EntityIntersection intersection = mousePicker.getEntityIntersection(Renderer.fieldEntities, null, false);
-		if(intersection != null) {
+		if (intersection != null) {
 			mouseField = Game.fields[Integer.parseInt(intersection.getEntity().getName().split(",")[0])][Integer.parseInt(intersection.getEntity().getName().split(",")[1])];
 		}
 
-		while (Keyboard.next()) {
+		if (Game.gameFinish != 0) {
+			wallBuildMode = false;
+			farmlandBuildMode = false;
+		} else
+			while (Keyboard.next()) {
 
-			// WALL
-			if (Keyboard.getEventKeyState() && Keyboard.getEventKey() == Keyboard.KEY_B) {
-				wallBuildMode = !wallBuildMode;
-				farmlandBuildMode = false;
+				// WALL
+				if (Keyboard.getEventKeyState() && Keyboard.getEventKey() == Keyboard.KEY_B) {
+					wallBuildMode = !wallBuildMode;
+					farmlandBuildMode = false;
 
-				wallBuildPath = null;
-				wallBuildStart = wallBuildEnd = null;
-				break;
+					wallBuildPath = null;
+					wallBuildStart = wallBuildEnd = null;
+					break;
+				}
+
+				// FARM
+				else if (Keyboard.getEventKeyState() && Keyboard.getEventKey() == Keyboard.KEY_V) {
+					wallBuildMode = false;
+					farmlandBuildMode = !farmlandBuildMode;
+
+					wallBuildPath = null;
+					wallBuildStart = wallBuildEnd = null;
+					break;
+				}
 			}
-
-			// FARM
-			else if (Keyboard.getEventKeyState() && Keyboard.getEventKey() == Keyboard.KEY_V) {
-				wallBuildMode = false;
-				farmlandBuildMode = !farmlandBuildMode;
-
-				wallBuildPath = null;
-				wallBuildStart = wallBuildEnd = null;
-				break;
-			}
-		}
 
 		while (Mouse.next()) {
 
@@ -80,8 +85,8 @@ public class Input {
 					wallBuildPath = null;
 				}
 			}
-			
-			if(wallBuildMode && Mouse.getEventButton() == 1) {
+
+			if (wallBuildMode && Mouse.getEventButton() == 1) {
 				wallBuildPath = null;
 				wallBuildStart = wallBuildEnd = null;
 			}
