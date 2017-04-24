@@ -47,10 +47,12 @@ public class AICalculation {
 			return null;
 		}
 		
+		List<Unit> enemyFarmers = enemyUnits.stream().filter(u -> ! (u instanceof UnitFarmer)).collect(Collectors.toList());
+		
 		
 		//TODO: marriage task: WaitingForMarriageTask?
 		float needToMate = 0.25f;
-		if(allyUnits.size() < 20) needToMate += 0.5f;
+		if(allyUnits.size() < 20) needToMate += 0.4f;
 		if(allyUnits.size() >= 2) needToMate += Math.max(0f, 1f - Math.max(1f, allyUnits.get(0).distance(unit) / 10f)) / 5f;
 		if((float)allyUnits.size() / (float)enemyUnits.size() < 0.75) needToMate += 0.15f;
 		if(allyUnits.size() > 100) needToMate -= 100f;
@@ -67,8 +69,10 @@ public class AICalculation {
 			}
 		}
 		
-		//Flee if enemy force nearby is bigger then own force, attention, real distance via neightbours
-		
+		//Flee if enemy force nearby is bigger then own force, attention, real distance via neighbours
+		List<Unit> targetList = Math.random() > 0.75 ? enemyFarmers : enemyUnits;
+		if(enemyUnits.get(0).distance(unit) < 3)
+			targetList = enemyUnits;
 		
 		if(unit instanceof UnitMelee) {
 			if(enemyUnits.get(0).getField() == unit.getField())
@@ -96,7 +100,33 @@ public class AICalculation {
 			}
 		}
 		
-		
+		if(unit instanceof UnitFarmer) {
+			if(unit.getField().isHarvestable()) {
+				unit.getField().harvest(unit.getAlliance());
+				return null;
+			}
+			
+			List<Field> closedList = new LinkedList<Field>();
+			List<Field> openList = new LinkedList<Field>();
+			openList.add(unit.getField());
+			
+//			while(! openList.isEmpty()) {
+//				Field current = openList.get(0);
+//				closedList.add(current);
+//				
+//				if(current.isHarvestable()) {
+//					Optional<Path> path = Pathfinder.getPath(unit.getField(), current);
+//					if(path.isPresent()) {
+////						return new PathfindingTask(path.get());
+//						return null;
+//					}
+//				}
+//				
+//				Stream.of(current.getNeighbors())
+//				.filter(f -> !closedList.contains(f) && !openList.contains(f))
+//				.forEach(f -> openList.add(f));
+//			}
+		}
 		
 		//ELSE
 		Optional<Path> path = Pathfinder.getPath(unit.getField(), Game.fields[(int)(Math.random() * (Game.FIELDS_X - 1))][(int)(Math.random() * (Game.FIELDS_Y - 1))]);
@@ -109,8 +139,12 @@ public class AICalculation {
 	
 	
 	public static TeamComposition getTeamComposition(Alliance alliance) {
-		if(Game.units.stream().filter(u -> u instanceof UnitFarmer && u.getAlliance() == alliance).count() < Game.units.stream().filter(u -> u.getAlliance() == alliance).count())
-			return new TeamComposition(0.25f, 0.25f, 0.5f);
+		int farmer = (int) Game.units.stream().filter(u -> u instanceof UnitFarmer && u.getAlliance() == alliance).count();
+		int units = (int) Game.units.stream().filter(u -> u.getAlliance() == alliance).count();
+		if(farmer < 2)
+			return new TeamComposition(0.0f, 0.0f, 1.0f);
+		else if(farmer < units / 4)
+			return new TeamComposition(0.2f, 0.1f, 0.7f);
 		else
 			return new TeamComposition(0.6f, 0.3f, 0.1f);
 	}
