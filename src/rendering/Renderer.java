@@ -13,6 +13,7 @@ import org.lwjgl.util.vector.Vector4f;
 
 import de.geosearchef.matella.entities.Entity;
 import de.geosearchef.matella.entities.Player;
+import de.geosearchef.matella.guis.GuiRenderer;
 import de.geosearchef.matella.models.Model;
 import de.geosearchef.matella.models.ModelLoader;
 import de.geosearchef.matella.profiling.GPUProfiler;
@@ -25,6 +26,7 @@ import de.geosearchef.matella.terrains.Terrain;
 import de.geosearchef.matella.water.WaterTile;
 import game.Field;
 import game.Game;
+import input.Input;
 import lombok.Getter;
 import lombok.NonNull;
 import util.OpenSimplexNoise;
@@ -46,6 +48,13 @@ public class Renderer {
 	public static MasterRenderer renderer;
 	public static Camera camera;
 	public static Player player;
+	
+	public static GuiRenderer guiRenderer;
+	public static int meleeIcon;
+	public static int rangedIcon;
+	public static int farmerIcon;
+	public static int farmModeIcon;
+	public static int wallModeIcon;
 
 	public static void init() {
 
@@ -54,6 +63,8 @@ public class Renderer {
 
 		renderer = new MasterRenderer(loader, CAST_SHADOW, new Vector2f(SHADOW_FRAMEBUFFER_SIZE, SHADOW_FRAMEBUFFER_SIZE), new LDEntityShaderHook(), null);
 		GPUProfiler.setPROFILING_ENABLED(false);
+		
+		guiRenderer = new GuiRenderer(loader);
 
 		player = new Player(null, new Vector3f(0, 0, 0), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1), false);
 		player.setMovementSpeed(10);
@@ -77,7 +88,7 @@ public class Renderer {
 		lights.add(new Light(new Vector3f(0f, 50f, 0f), new Vector3f(1f, 1f, 1f)));
 		lights.add(new Light(new Vector3f(0f, 50f, 0f), new Vector3f(1f, 1f, 1f)));
 
-		loadModels();
+		loadAssets();
 	}
 
 	public static List<Model> models = new LinkedList<Model>();
@@ -137,11 +148,39 @@ public class Renderer {
 
 		GPUProfiler.startFrame();
 		renderer.fullRender(null, entities, Collections.<Terrain>emptyList(), lights, waterTiles, waterTile.getPosition().y, camera, null, null);
+		
+		renderGUI();
+		
 		GPUProfiler.endFrame();
 		GPUProfiler.dumpFrames();
 	}
+	
+	public static void renderGUI() {
+		float aspect = DisplayManager.getHEIGHT() / DisplayManager.getWIDTH();
+		
+		guiRenderer.begin();
+		
+		guiRenderer.render(meleeIcon, new Vector2f(-0.97f, -0.95f), 0f, new Vector2f(0.04f * aspect, 0.04f), new Vector4f(1f, 1f, 1f, 1f));
+		guiRenderer.render(rangedIcon, new Vector2f(-0.97f, -0.85f), 0f, new Vector2f(0.04f * aspect, 0.04f), new Vector4f(1f, 1f, 1f, 1f));
+		guiRenderer.render(farmerIcon, new Vector2f(-0.97f, -0.75f), 0f, new Vector2f(0.04f * aspect, 0.04f), new Vector4f(1f, 1f, 1f, 1f));
+		
+		guiRenderer.render(meleeIcon, new Vector2f(+0.97f, -0.95f), 0f, new Vector2f(0.04f * aspect, 0.04f), new Vector4f(0f, 0f, 0f, 1f));
+		guiRenderer.render(rangedIcon, new Vector2f(+0.97f, -0.85f), 0f, new Vector2f(0.04f * aspect, 0.04f), new Vector4f(0f, 0f, 0f, 1f));
+		guiRenderer.render(farmerIcon, new Vector2f(+0.97f, -0.75f), 0f, new Vector2f(0.04f * aspect, 0.04f), new Vector4f(0f, 0f, 0f, 1f));
+		
+		guiRenderer.render(farmModeIcon, new Vector2f(-0.88f, 0.93f), 0f, new Vector2f(0.05f * aspect, 0.05f), Input.farmlandBuildMode ? new Vector4f(1f, 1f, 1f, 1f) : new Vector4f(0.7f, 0.7f, 0.7f, 1f));
+		guiRenderer.render(wallModeIcon, new Vector2f(-0.95f, 0.93f), 0f, new Vector2f(0.05f * aspect, 0.05f), Input.wallBuildMode ? new Vector4f(1f, 1f, 1f, 1f) : new Vector4f(0.7f, 0.7f, 0.7f, 1f));
+		
+		guiRenderer.end();
+	}
 
-	public static void loadModels() {
+	public static void loadAssets() {
 		models.add(ModelLoader.loadModel("unit0", loader, null));
+		
+		meleeIcon = loader.loadGUITexture("gui/square");
+		rangedIcon = loader.loadGUITexture("gui/ranged");
+		farmerIcon = loader.loadGUITexture("gui/circle");
+		farmModeIcon = loader.loadGUITexture("gui/farmlandBuildMode");
+		wallModeIcon = loader.loadGUITexture("gui/wallBuildMode");
 	}
 }
