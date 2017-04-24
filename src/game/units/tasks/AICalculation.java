@@ -50,7 +50,7 @@ public class AICalculation {
 		
 		//TODO: marriage task: WaitingForMarriageTask?
 		float needToMate = 0.25f;
-		if(allyUnits.size() < 20) needToMate += 0.2f;
+		if(allyUnits.size() < 20) needToMate += 0.5f;
 		if(allyUnits.size() >= 2) needToMate += Math.max(0f, 1f - Math.max(1f, allyUnits.get(0).distance(unit) / 10f)) / 5f;
 		if((float)allyUnits.size() / (float)enemyUnits.size() < 0.75) needToMate += 0.15f;
 		if(allyUnits.size() > 100) needToMate -= 100f;
@@ -109,7 +109,10 @@ public class AICalculation {
 	
 	
 	public static TeamComposition getTeamComposition(Alliance alliance) {
-		return new TeamComposition(0.6f, 0.2f, 0.2f);
+		if(Game.units.stream().filter(u -> u instanceof UnitFarmer && u.getAlliance() == alliance).count() < Game.units.stream().filter(u -> u.getAlliance() == alliance).count())
+			return new TeamComposition(0.25f, 0.25f, 0.5f);
+		else
+			return new TeamComposition(0.6f, 0.3f, 0.1f);
 	}
 	
 	
