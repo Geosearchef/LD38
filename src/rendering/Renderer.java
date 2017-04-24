@@ -78,7 +78,7 @@ public class Renderer {
 		fontRenderer = new FontRenderer(loader);
 		font = new Font("simple", loader, 0.3f, 0.1f, 0.5f, 0.15f, new Vector3f(1, 1, 1), new Vector3f(0, 0, 0));
 
-		player = new Player(null, new Vector3f(24, 0, 36), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1), false);
+		player = new Player(null, new Vector3f(24, 0, 30), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1), false);
 		player.setMovementSpeed(10);
 		player.setCtrlMultiplier(1);
 		camera = new Camera(player);
