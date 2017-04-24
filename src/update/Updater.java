@@ -80,6 +80,8 @@ public class Updater {
 		// }
 		//
 		// }
+		
+		ResourceManager.update(d);
 	}
 
 	public static void scheduleAfterUpdate(Runnable runnable) {

@@ -28,6 +28,7 @@ import de.geosearchef.matella.terrains.Terrain;
 import de.geosearchef.matella.water.WaterTile;
 import game.Field;
 import game.Game;
+import game.ResourceManager;
 import game.units.Alliance;
 import game.units.Unit;
 import game.units.UnitFarmer;
@@ -216,6 +217,9 @@ public class Renderer {
 		fontRenderer.render("" + farmerDark, font, Font.RIGHT, new Vector2f(0.94f, -0.75f), 0f, 0.03f, FONT_WIDTH_FACTOR, 1f);
 		
 		fontRenderer.render((Game.gameFinish == 0 ? ((- Game.gameStart + System.currentTimeMillis()) / 1000) : ((- Game.gameStart + Game.gameFinish) / 1000)) + " secs", font, Font.CENTER, new Vector2f(0f, Game.gameFinish == 0 ? -0.95f : 0f), 0f, 0.03f, 1f, 1f);
+		
+		fontRenderer.render((int)ResourceManager.farmland + "", font, Font.CENTER, new Vector2f(-0.88f, 0.85f), 0f, 0.03f, FONT_WIDTH_FACTOR, 1f);
+		fontRenderer.render((int)ResourceManager.walls + "", font, Font.CENTER, new Vector2f(-0.95f, 0.85f), 0f, 0.03f, FONT_WIDTH_FACTOR, 1f);
 		
 		fontRenderer.end();
 	}

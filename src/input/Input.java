@@ -10,6 +10,7 @@ import de.geosearchef.matella.toolbox.MousePicker;
 import game.Field;
 import game.FieldType;
 import game.Game;
+import game.ResourceManager;
 import lombok.Getter;
 import rendering.Renderer;
 import update.Updater;
@@ -76,10 +77,13 @@ public class Input {
 					wallBuildStart = wallBuildEnd = null;
 
 					if (wallBuildPath != null) {
-						wallBuildPath.getFields().stream().filter(f -> f.getType() != FieldType.WALL).forEach(f -> {
-							// TODO: cost check
-							f.setType(FieldType.WALL);
-						});
+						int wallLength = (int) wallBuildPath.getFields().stream().filter(f -> f.getType() != FieldType.WALL).count();
+						if(ResourceManager.hasWalls(wallLength)) {
+							ResourceManager.walls -= wallLength;
+							wallBuildPath.getFields().stream().filter(f -> f.getType() != FieldType.WALL).forEach(f -> {
+								f.setType(FieldType.WALL);
+							});
+						}
 					}
 
 					wallBuildPath = null;
@@ -94,7 +98,8 @@ public class Input {
 			// FARM
 			else if (farmlandBuildMode && Mouse.getEventButton() == 0) {
 				if (!Mouse.getEventButtonState()) {
-					if (mouseField.getType() == FieldType.GRASS) {
+					if (mouseField.getType() == FieldType.GRASS && ResourceManager.hasFarmland()) {
+						ResourceManager.farmland -= 1;
 						mouseField.setType(FieldType.FARMLAND);
 					}
 				}

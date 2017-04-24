@@ -41,11 +41,11 @@ public class AICalculation {
 			Collections.sort(allyUnits, (Unit u1, Unit u2) -> new Float(u1.distance(unit)).compareTo(u2.distance(unit)));
 		}
 		
-//		if(enemyUnits.isEmpty()) {
-//			if(Game.gameFinish == 0)
-//				Game.gameFinish = System.currentTimeMillis();
-//			return null;
-//		}
+		if(enemyUnits.isEmpty()) {
+			if(Game.gameFinish == 0)
+				Game.gameFinish = System.currentTimeMillis();
+			return null;
+		}
 		
 		
 		//TODO: marriage task: WaitingForMarriageTask?
