@@ -98,8 +98,8 @@ public class Renderer {
 		lights.get(0).setColor(new Vector3f(1, 1, 1));
 		renderer.setShadowMapCenter(new Vector3f(camera.getPosition()));
 
-		float mapSizeX = Game.FIELDS_X * Field.DIMENSIONS.x;
-		float mapSizeY = Game.FIELDS_Y * Field.DIMENSIONS.y * 0.75f;
+		float mapSizeX = Game.MAP_SIZE_X;
+		float mapSizeY = Game.MAP_SIZE_Y;
 		float mapCenterX = player.getPosition().x;
 		float mapCenterY = player.getPosition().z - mapSizeY / 2.0f;
 

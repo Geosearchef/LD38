@@ -1,5 +1,7 @@
 package game.units;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -158,4 +160,27 @@ public abstract class Unit extends Entity {
 	}
 
 	private static Vector3f[] movementDest = new Vector3f[] { new Vector3f((float) 0.5f * Field.DIMENSIONS.y * (float) Math.sqrt(0.75), 0, (float) Math.sqrt(3) / 2f * Field.DIMENSIONS.y * (float) Math.sqrt(0.75) * (-1f)), new Vector3f(1, 0, 0), new Vector3f((float) 0.5f * Field.DIMENSIONS.y * (float) Math.sqrt(0.75), 0, (float) Math.sqrt(3) / 2f * Field.DIMENSIONS.y * (float) Math.sqrt(0.75)), new Vector3f((float) 0.5f * Field.DIMENSIONS.y * (float) Math.sqrt(0.75) * (-1f), 0, (float) Math.sqrt(3) / 2f * Field.DIMENSIONS.y * (float) Math.sqrt(0.75)), new Vector3f(-1, 0, 0), new Vector3f((float) 0.5f * Field.DIMENSIONS.y * (float) Math.sqrt(0.75) * (-1f), 0, (float) Math.sqrt(3) / 2f * Field.DIMENSIONS.y * (float) Math.sqrt(0.75) * (-1f)) };
+	
+	
+	
+	
+	
+	
+	public static float distance(Unit u1, Unit u2) {
+		Set<Vector3f> u2Pos = new HashSet<Vector3f>();
+		u2Pos.add(u2.getPosition());
+		u2Pos.add(Vector3f.add(u2.getPosition(), new Vector3f(+Game.MAP_SIZE_X, 0f, 0f), null));
+		u2Pos.add(Vector3f.add(u2.getPosition(), new Vector3f(-Game.MAP_SIZE_X, 0f, 0f), null));
+		u2Pos.add(Vector3f.add(u2.getPosition(), new Vector3f(0f, 0f, +Game.MAP_SIZE_X), null));
+		u2Pos.add(Vector3f.add(u2.getPosition(), new Vector3f(0f, 0f, -Game.MAP_SIZE_X), null));
+		u2Pos.add(Vector3f.add(u2.getPosition(), new Vector3f(+Game.MAP_SIZE_X, 0f, +Game.MAP_SIZE_Y), null));
+		u2Pos.add(Vector3f.add(u2.getPosition(), new Vector3f(+Game.MAP_SIZE_X, 0f, -Game.MAP_SIZE_Y), null));
+		u2Pos.add(Vector3f.add(u2.getPosition(), new Vector3f(-Game.MAP_SIZE_X, 0f, -Game.MAP_SIZE_Y), null));
+		u2Pos.add(Vector3f.add(u2.getPosition(), new Vector3f(-Game.MAP_SIZE_X, 0f, +Game.MAP_SIZE_Y), null));
+		return (float) u2Pos.stream().mapToDouble(pos -> Vector3f.sub(pos, u1.getPosition(), null).length()).min().orElse(Float.MAX_VALUE);
+	}
+	
+	public float distance(Unit u2) {
+		return distance(this, u2);
+	}
 }
