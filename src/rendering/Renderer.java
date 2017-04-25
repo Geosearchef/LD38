@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
@@ -43,11 +44,11 @@ public class Renderer {
 
 	private static final String TITLE = "LD38";
 
-	private static final int WIDTH = 1920;
-	private static final int HEIGHT = 1080;
+	private static int WIDTH = 1920;
+	private static int HEIGHT = 1080;
 	private static final int FPS_CAP = 60;
 	private static final int MSAA = 16;
-	private static final boolean FULLSCREEN = false;
+	private static final boolean FULLSCREEN = true;
 	private static final boolean VSYNC = true;
 	private static final boolean CAST_SHADOW = false;
 	private static final int SHADOW_FRAMEBUFFER_SIZE = 1024;
@@ -69,7 +70,10 @@ public class Renderer {
 	public static final float FONT_WIDTH_FACTOR = 0.6f;
 
 	public static void init() {
-
+		
+		WIDTH = Display.getWidth();
+		HEIGHT = Display.getHeight();
+		
 		DisplayManager.createDisplay(TITLE, WIDTH, HEIGHT, FPS_CAP, MSAA, FULLSCREEN, VSYNC);
 		loader = new MainLoader();
 
