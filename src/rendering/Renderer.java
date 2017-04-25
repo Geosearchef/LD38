@@ -71,8 +71,8 @@ public class Renderer {
 
 	public static void init() {
 		
-		WIDTH = Display.getWidth();
-		HEIGHT = Display.getHeight();
+		WIDTH = Display.getDesktopDisplayMode().getWidth();
+		HEIGHT = Display.getDesktopDisplayMode().getHeight();
 		
 		try {
 			DisplayManager.createDisplay(TITLE, WIDTH, HEIGHT, FPS_CAP, MSAA, FULLSCREEN, VSYNC);
