@@ -74,7 +74,13 @@ public class Renderer {
 		WIDTH = Display.getWidth();
 		HEIGHT = Display.getHeight();
 		
-		DisplayManager.createDisplay(TITLE, WIDTH, HEIGHT, FPS_CAP, MSAA, FULLSCREEN, VSYNC);
+		try {
+			DisplayManager.createDisplay(TITLE, WIDTH, HEIGHT, FPS_CAP, MSAA, FULLSCREEN, VSYNC);
+		} catch(Exception e) {
+			e.printStackTrace();
+			DisplayManager.createDisplay(TITLE, WIDTH, HEIGHT, FPS_CAP, 1, FULLSCREEN, VSYNC);
+		}
+		
 		loader = new MainLoader();
 
 		renderer = new MasterRenderer(loader, CAST_SHADOW, new Vector2f(SHADOW_FRAMEBUFFER_SIZE, SHADOW_FRAMEBUFFER_SIZE), new LDEntityShaderHook(), null);
