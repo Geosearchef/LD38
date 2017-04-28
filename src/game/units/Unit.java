@@ -143,11 +143,11 @@ public abstract class Unit extends Entity {
 	}
 
 	private final static float DAMAGE_WHEN_HUNGRY = 25f;
-	private final static int FOOD_CONSUMED = 10;
+	private final static float FOOD_CONSUMED = 2;
 	private final static float EATING_DELAY = 1f;
 
 	private boolean hungry = false;
-	private float lastFoodConsumption = 0;
+	private float lastFoodConsumption = 0f;
 
 	private void eat(float d) {
 		lastFoodConsumption += d;
@@ -160,10 +160,10 @@ public abstract class Unit extends Entity {
 
 			if (ResourceManager.food.get(this.alliance) >= FOOD_CONSUMED) {
 				ResourceManager.changeFoodCount(this.alliance, -FOOD_CONSUMED);
-				lastFoodConsumption = 0;
+				lastFoodConsumption = 0f;
+				hungry = false;
 			} else {
-				// TODO ENABLE ONCE FARMING IS FUNCTIONAL
-				// this.damage(DAMAGE_WHEN_HUNGRY * d);
+				this.damage(DAMAGE_WHEN_HUNGRY * d);
 			}
 		}
 	}
