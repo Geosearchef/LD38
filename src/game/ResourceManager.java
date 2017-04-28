@@ -11,8 +11,8 @@ public class ResourceManager {
 	private static final int STARTING_WALLS = 10;
 	private static final int STARTING_FARMLAND = 5;
 	
-	private static final float WALLS_GAIN = 0.2f;
-	private static final float FARMLAND_GAIN = 0.1f;
+	private static final float WALLS_GAIN = 0.25f;
+	private static final float FARMLAND_GAIN = 0.2f;
 
 	public static Map<Alliance, Float> food;
 

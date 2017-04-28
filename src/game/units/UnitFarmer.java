@@ -6,7 +6,7 @@ public class UnitFarmer extends Unit {
 
 	public UnitFarmer(Alliance alliance, Field startingField) {
 		super(alliance, startingField);
-		this.health = 250;
+		this.health = 500;
 		this.damage = 0;
 	}
 	
