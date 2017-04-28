@@ -14,15 +14,15 @@ public class ResourceManager {
 	private static final float WALLS_GAIN = 0.2f;
 	private static final float FARMLAND_GAIN = 0.1f;
 
-	public static Map<Alliance, Integer> food;
+	public static Map<Alliance, Float> food;
 
 	public static volatile float walls;
 	public static volatile float farmland;
 
 	public static void init() {
 		food = new HashMap<>();
-		food.put(Alliance.LIGHT, STARTING_FOOD);
-		food.put(Alliance.DARK, STARTING_FOOD);
+		food.put(Alliance.LIGHT, (float)STARTING_FOOD);
+		food.put(Alliance.DARK, (float)STARTING_FOOD);
 
 		walls = STARTING_WALLS;
 		farmland = STARTING_FARMLAND;
@@ -33,8 +33,12 @@ public class ResourceManager {
 		farmland += FARMLAND_GAIN * d;
 	}
 
-	public static void changeFoodCount(Alliance alliance, int change) {
+	public static void changeFoodCount(Alliance alliance, float change) {
 		food.put(alliance, food.get(alliance) + change);
+	}
+	
+	public static int getRoundedFoodAmount(Alliance alliance) {
+		return food.get(alliance).intValue();
 	}
 	
 	public static boolean hasWalls(int x) {

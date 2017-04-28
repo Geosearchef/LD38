@@ -44,8 +44,8 @@ public class Renderer {
 
 	private static final String TITLE = "LD38";
 
-	private static int WIDTH = 1920;
-	private static int HEIGHT = 1080;
+	private static int WIDTH;
+	private static int HEIGHT;
 	private static final int FPS_CAP = 60;
 	private static final int MSAA = 16;
 	private static final boolean FULLSCREEN = true;
@@ -64,6 +64,7 @@ public class Renderer {
 	public static int farmerIcon;
 	public static int farmModeIcon;
 	public static int wallModeIcon;
+	public static int foodIcon;
 	
 	public static FontRenderer fontRenderer;
 	public static Font font;
@@ -187,10 +188,12 @@ public class Renderer {
 		guiRenderer.render(meleeIcon, new Vector2f(-0.97f, -0.95f), 0f, new Vector2f(0.04f * aspect, 0.04f), new Vector4f(1f, 1f, 1f, 1f));
 		guiRenderer.render(rangedIcon, new Vector2f(-0.97f, -0.85f), 0f, new Vector2f(0.04f * aspect, 0.04f), new Vector4f(1f, 1f, 1f, 1f));
 		guiRenderer.render(farmerIcon, new Vector2f(-0.97f, -0.75f), 0f, new Vector2f(0.04f * aspect, 0.04f), new Vector4f(1f, 1f, 1f, 1f));
+		guiRenderer.render(foodIcon, new Vector2f(-0.97f, -0.45f), 0f, new Vector2f(0.04f * aspect, 0.04f), new Vector4f(1f, 1f, 0.2f, 1f));
 		
 		guiRenderer.render(meleeIcon, new Vector2f(+0.97f, -0.95f), 0f, new Vector2f(0.04f * aspect, 0.04f), new Vector4f(0f, 0f, 0f, 1f));
 		guiRenderer.render(rangedIcon, new Vector2f(+0.97f, -0.85f), 0f, new Vector2f(0.04f * aspect, 0.04f), new Vector4f(0f, 0f, 0f, 1f));
 		guiRenderer.render(farmerIcon, new Vector2f(+0.97f, -0.75f), 0f, new Vector2f(0.04f * aspect, 0.04f), new Vector4f(0f, 0f, 0f, 1f));
+		guiRenderer.render(foodIcon, new Vector2f(+0.97f, -0.45f), 0f, new Vector2f(0.04f * aspect, 0.04f), new Vector4f(1f, 1f, 0.2f, 1f));
 		
 		guiRenderer.render(farmModeIcon, new Vector2f(-0.88f, 0.93f), 0f, new Vector2f(0.05f * aspect, 0.05f), Input.farmlandBuildMode ? new Vector4f(1f, 1f, 1f, 1f) : new Vector4f(0.7f, 0.7f, 0.7f, 1f));
 		guiRenderer.render(wallModeIcon, new Vector2f(-0.95f, 0.93f), 0f, new Vector2f(0.05f * aspect, 0.05f), Input.wallBuildMode ? new Vector4f(1f, 1f, 1f, 1f) : new Vector4f(0.7f, 0.7f, 0.7f, 1f));
@@ -221,10 +224,12 @@ public class Renderer {
 		fontRenderer.render("" + meleeLight, font, Font.LEFT, new Vector2f(-0.94f, -0.95f), 0f, 0.03f, FONT_WIDTH_FACTOR, 1f);
 		fontRenderer.render("" + rangedLight, font, Font.LEFT, new Vector2f(-0.94f, -0.85f), 0f, 0.03f, FONT_WIDTH_FACTOR, 1f);
 		fontRenderer.render("" + farmerLight, font, Font.LEFT, new Vector2f(-0.94f, -0.75f), 0f, 0.03f, FONT_WIDTH_FACTOR, 1f);
+		fontRenderer.render("" + ResourceManager.getRoundedFoodAmount(Alliance.LIGHT), font, Font.LEFT, new Vector2f(-0.94f, -0.45f), 0f, 0.03f, FONT_WIDTH_FACTOR, 1f);
 		
 		fontRenderer.render("" + meleeDark, font, Font.RIGHT, new Vector2f(0.94f, -0.95f), 0f, 0.03f, FONT_WIDTH_FACTOR, 1f);
 		fontRenderer.render("" + rangedDark, font, Font.RIGHT, new Vector2f(0.94f, -0.85f), 0f, 0.03f, FONT_WIDTH_FACTOR, 1f);
 		fontRenderer.render("" + farmerDark, font, Font.RIGHT, new Vector2f(0.94f, -0.75f), 0f, 0.03f, FONT_WIDTH_FACTOR, 1f);
+		fontRenderer.render("" + ResourceManager.getRoundedFoodAmount(Alliance.DARK), font, Font.RIGHT, new Vector2f(0.94f, -0.45f), 0f, 0.03f, FONT_WIDTH_FACTOR, 1f);
 		
 		fontRenderer.render((Game.gameFinish == 0 ? ((- Game.gameStart + System.currentTimeMillis()) / 1000) : ((- Game.gameStart + Game.gameFinish) / 1000)) + " secs", font, Font.CENTER, new Vector2f(0f, Game.gameFinish == 0 ? -0.95f : 0f), 0f, 0.03f, 1f, 1f);
 		
@@ -244,5 +249,6 @@ public class Renderer {
 		farmerIcon = loader.loadGUITexture("gui/circle");
 		farmModeIcon = loader.loadGUITexture("gui/farmlandBuildMode");
 		wallModeIcon = loader.loadGUITexture("gui/wallBuildMode");
+		foodIcon = loader.loadGUITexture("gui/foodIcon");
 	}
 }
