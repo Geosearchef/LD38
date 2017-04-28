@@ -3,6 +3,7 @@ package game.units.tasks;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -10,6 +11,7 @@ import java.util.stream.Stream;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
+import de.geosearchef.matella.profiling.CPUProfiler;
 import game.Field;
 import game.Game;
 import game.units.Alliance;
@@ -27,7 +29,8 @@ public class AICalculation {
 		
 		List<Unit> enemyUnits = null;
 		List<Unit> allyUnits = new LinkedList<Unit>();
-		
+		CPUProfiler.setPROFILING_ENABLED(true);
+		CPUProfiler.start();
 		synchronized (Game.units) {
 			allyUnits.addAll(Game.units);
 			
@@ -40,6 +43,7 @@ public class AICalculation {
 			allyUnits.remove(unit);
 			Collections.sort(allyUnits, (Unit u1, Unit u2) -> new Float(u1.distance(unit)).compareTo(u2.distance(unit)));
 		}
+		CPUProfiler.dump("collect units");
 		
 		if(enemyUnits.isEmpty()) {
 			if(Game.gameFinish == 0)
@@ -58,21 +62,27 @@ public class AICalculation {
 		if(allyUnits.size() > 100) needToMate -= 100f;
 		if(Math.random() < needToMate) {
 			for(Unit ally : allyUnits) {
-				if(ally.getTask() == null || !(ally.getTask() instanceof MarriageTask)) {
-					MarriageTask allyTask = new MarriageTask(Pathfinder.getPath(unit.getField(), ally.getField()).get(), unit);
-					allyTask.setUnit(ally);
-					MarriageTask ownTask = new MarriageTask(Pathfinder.getPath(unit.getField(), ally.getField()).get(), ally);
-					ally.setTask(allyTask);
-					ally.setVelocity(new Vector3f(0f, 0f, 0f));
-					return ownTask;
+				try {
+					if(ally.getTask() == null || !(ally.getTask() instanceof MarriageTask)) {
+						MarriageTask allyTask = new MarriageTask(Pathfinder.getPath(unit.getField(), ally.getField()).get(), unit);
+						allyTask.setUnit(ally);
+						MarriageTask ownTask = new MarriageTask(Pathfinder.getPath(unit.getField(), ally.getField()).get(), ally);
+						ally.setTask(allyTask);
+						ally.setVelocity(new Vector3f(0f, 0f, 0f));
+						return ownTask;
+					}
+				} catch(NoSuchElementException e) {
+					System.out.println("No path to ally found for marrying.");
 				}
 			}
 		}
+		CPUProfiler.dump("marriage task");
 		
 		//Flee if enemy force nearby is bigger then own force, attention, real distance via neighbours
 		List<Unit> targetList = Math.random() > 0.75 ? enemyFarmers : enemyUnits;
 		if(enemyUnits.get(0).distance(unit) < 3)
 			targetList = enemyUnits;
+		
 		
 		if(unit instanceof UnitMelee) {
 			if(enemyUnits.get(0).getField() == unit.getField())
@@ -81,11 +91,13 @@ public class AICalculation {
 			for(Unit target : enemyUnits) {
 				Optional<Path> path = Pathfinder.getPath(unit.getField(), target.getField());
 				if(path.isPresent()) {
+					CPUProfiler.dump("melee target pathfinder");
 					return new TargetUnitTask(target, path.get());
 				}
 			}
 		}
 		
+		//TODO: optimise
 		if(unit instanceof UnitRanged) {
 			if(enemyUnits.get(0).getField() == unit.getField() || Stream.of(enemyUnits.get(0).getField().getNeighbors()).anyMatch(f -> unit.getField() == f) || Stream.of(enemyUnits.get(0).getField().getNeighbors()).flatMap(f -> Stream.of(f.getNeighbors())).anyMatch(f -> unit.getField() == f))
 				return new RangedAttackTask(enemyUnits.get(0));
@@ -93,6 +105,7 @@ public class AICalculation {
 			for(Unit target : enemyUnits) {
 				Optional<Path> path = Pathfinder.getPath(unit.getField(), target.getField());
 				if(path.isPresent()) {
+					CPUProfiler.dump("ranged target pathfinder");
 					path.get().removeDest();//ranged, can skip two fields
 					path.get().removeDest();
 					return new TargetUnitTask(target, path.get());
@@ -110,22 +123,22 @@ public class AICalculation {
 			List<Field> openList = new LinkedList<Field>();
 			openList.add(unit.getField());
 			
-//			while(! openList.isEmpty()) {
-//				Field current = openList.get(0);
-//				closedList.add(current);
-//				
-//				if(current.isHarvestable()) {
-//					Optional<Path> path = Pathfinder.getPath(unit.getField(), current);
-//					if(path.isPresent()) {
-////						return new PathfindingTask(path.get());
+			while(! openList.isEmpty()) {
+				Field current = openList.remove(0);
+				closedList.add(current);
+				
+				if(current.isHarvestable()) {
+					Optional<Path> path = Pathfinder.getPath(unit.getField(), current);
+					if(path.isPresent()) {
+						return new PathfindingTask(path.get());
 //						return null;
-//					}
-//				}
-//				
-//				Stream.of(current.getNeighbors())
-//				.filter(f -> !closedList.contains(f) && !openList.contains(f))
-//				.forEach(f -> openList.add(f));
-//			}
+					}
+				}
+				
+				Stream.of(current.getNeighbors())
+				.filter(f -> !closedList.contains(f) && !openList.contains(f))
+				.forEach(f -> openList.add(f));
+			}
 		}
 		
 		//ELSE

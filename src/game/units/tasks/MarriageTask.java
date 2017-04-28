@@ -44,7 +44,6 @@ public class MarriageTask extends PathfindingTask {
 			if(System.currentTimeMillis() >= birthTime) {
 				Updater.scheduleAfterUpdate(() -> {
 					try {
-						System.out.println(AICalculation.getTeamComposition(getUnit().getAlliance()).getUnitClass());
 						Game.units.add((Unit) AICalculation.getTeamComposition(getUnit().getAlliance()).getUnitClass().getConstructor(new Class[]{Alliance.class, Field.class}).newInstance(getUnit().getAlliance(), getUnit().getField()));
 					} catch (Exception e) {
 						e.printStackTrace();
