@@ -17,6 +17,7 @@ import de.geosearchef.matella.entities.Player;
 import de.geosearchef.matella.fonts.Font;
 import de.geosearchef.matella.fonts.FontRenderer;
 import de.geosearchef.matella.guis.GuiRenderer;
+import de.geosearchef.matella.logging.Log;
 import de.geosearchef.matella.models.Model;
 import de.geosearchef.matella.models.ModelLoader;
 import de.geosearchef.matella.profiling.GPUProfiler;
@@ -79,7 +80,14 @@ public class Renderer {
 			DisplayManager.createDisplay(TITLE, WIDTH, HEIGHT, FPS_CAP, MSAA, FULLSCREEN, VSYNC);
 		} catch(Exception e) {
 			e.printStackTrace();
-			DisplayManager.createDisplay(TITLE, WIDTH, HEIGHT, FPS_CAP, 1, FULLSCREEN, VSYNC);
+			Log.info("Retrying with lower MSAA (4).");
+			try {
+				DisplayManager.createDisplay(TITLE, WIDTH, HEIGHT, FPS_CAP, 4, FULLSCREEN, VSYNC);
+			} catch(Exception e2) {
+				e2.printStackTrace();
+				Log.info("Retrying with lower MSAA (1).");
+				DisplayManager.createDisplay(TITLE, WIDTH, HEIGHT, FPS_CAP, 1, FULLSCREEN, VSYNC);
+			}
 		}
 		
 		loader = new MainLoader();
